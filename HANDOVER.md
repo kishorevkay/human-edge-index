@@ -10,6 +10,20 @@ Two things ship together from this one repo:
 They share one backend (`/api/*`) and one database, so they must be deployed
 together — the dashboard is not a separate app.
 
+> ### ⚠️ Read this before choosing where to host
+>
+> **This is not a static site.** If it is served as plain static files, it
+> *appears* to work and silently isn't:
+>
+> - The game plays perfectly end to end — but every `POST /api/track` is
+>   answered with the HTML fallback and a `200`, so **nothing is recorded**. No
+>   error, no console warning, no clue anything is wrong.
+> - `/dashboard` resolves to the SPA fallback and **serves the game instead of
+>   the dashboard**.
+>
+> Both were reproduced from a clean clone of this repo. The `/api` routes must
+> run server-side. See §2.
+
 ---
 
 ## 1. What you need to provision — nothing
