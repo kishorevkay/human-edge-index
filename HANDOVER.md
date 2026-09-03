@@ -17,20 +17,26 @@ together — the dashboard is not a separate app.
 The database stays on our side. You don't need to create a Redis instance, a
 Vercel KV, or any store at all.
 
-Kish will send you three environment variables to set on the deployment:
+Kish will send you **two** environment variables to set on the deployment:
 
 | Variable | What it is |
 |---|---|
 | `KV_REST_API_URL` | Redis REST endpoint (ours) |
 | `KV_REST_API_TOKEN` | Redis REST token (ours) |
-| `ATLAS_DASHBOARD_KEY` | The dashboard password — already circulated internally, please keep the value as sent |
 
 `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` are accepted as aliases if
 that's what your tooling injects.
 
-Two asks on those variables:
+There is a third variable, **`ATLAS_DASHBOARD_KEY`** — the dashboard password.
+**Kish will set that one himself** on the deployment; you don't need its value to
+host the app, and the game side doesn't use it. If the deployment console needs
+someone with access to paste it, give Kish a shout rather than picking a value —
+the protected routes fail closed with a 503 until it is set, which is the
+intended behaviour.
 
-- **Set them as secrets**, not committed config — this repo is public.
+Two asks on all of these:
+
+- **Set them as secrets**, never as committed config — this repo is public.
 - **Please don't point the app at a different store.** The pilot's existing
   players and leads live in ours, and the dashboard reads the same data the
   game writes.
@@ -105,21 +111,22 @@ The dashboard will keep counting on top of them.
 
 ## 5. Please don't change
 
-- **`ATLAS_DASHBOARD_KEY`** — already shared with the team.
 - **The `atlas:` key prefix** in `api/_store.js` — it namespaces our data.
 - **Scoring** (`SCORING_VERSION` in `src/atlas/main.js`). The percentile endpoint
   only compares runs of the same version; bumping it silently orphans history.
+- **The auth behaviour in `api/_auth.js`** — constant-time compare, per-IP rate
+  limiting, and failing closed when the key is unset.
 
 ## 6. Verifying a deployment
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' https://YOUR_HOST/            # 200
-curl -s -o /dev/null -w '%{http_code}\n' https://YOUR_HOST/api/stats   # 401
-curl -s -o /dev/null -w '%{http_code}\n' "https://YOUR_HOST/api/stats?key=THE_KEY"  # 200
+curl -s -o /dev/null -w '%{http_code}\n' https://YOUR_HOST/            # 200 — the game
+curl -s -o /dev/null -w '%{http_code}\n' https://YOUR_HOST/api/stats   # 401 — protected, as intended
 ```
 
-Then open `/dashboard?key=THE_KEY` — the header should read **LIVE** and the
-counters should tick as someone plays.
+That 401 is the whole check on your side: the game loads and the private routes
+refuse anonymous access. Kish will confirm the dashboard itself once he has set
+the key.
 
 ---
 
