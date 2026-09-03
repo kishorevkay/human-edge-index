@@ -1,0 +1,321 @@
+{
+  "project": "HUMAN EDGE RUNNER",
+  "version": 1,
+  "visualLock": {
+    "human": "#FFB454",
+    "humanDeep": "#D98E2B",
+    "machine": "#7FE3FF",
+    "background": "#080B16",
+    "danger": "#FF5470",
+    "camera": "orthographic side-on 2D platformer",
+    "lighting": "upper-left"
+  },
+  "assets": [
+    {
+      "id": "runner_sheet",
+      "file": "runner-sheet.png",
+      "type": "sprite-sheet",
+      "status": "approved",
+      "frames": [
+        "idle",
+        "run_1",
+        "run_2",
+        "run_3",
+        "run_4",
+        "jump",
+        "hit",
+        "victory"
+      ],
+      "columns": 8,
+      "rows": 1,
+      "frameWidth": 320,
+      "frameHeight": 724,
+      "width": 2560,
+      "height": 724,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.92
+      },
+      "collision": {
+        "x": 0.28,
+        "y": 0.12,
+        "w": 0.44,
+        "h": 0.78
+      }
+    },
+    {
+      "id": "axiom_drone",
+      "file": "axiom-drone.png",
+      "type": "sprite",
+      "status": "approved",
+      "width": 543,
+      "height": 724,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "collision": {
+        "x": 0.16,
+        "y": 0.18,
+        "w": 0.68,
+        "h": 0.64
+      }
+    },
+    {
+      "id": "obstacle_barrier",
+      "file": "obstacle-barrier.png",
+      "type": "sprite",
+      "status": "approved",
+      "width": 543,
+      "height": 724,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "obstacle_scanner",
+      "file": "obstacle-scanner.png",
+      "type": "sprite",
+      "status": "approved",
+      "width": 543,
+      "height": 724,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "obstacle_data_spike",
+      "file": "obstacle-data-spike.png",
+      "type": "sprite",
+      "status": "approved",
+      "width": 543,
+      "height": 724,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "bg_sky",
+      "file": "bg-sky.png",
+      "type": "seamless-background",
+      "status": "approved",
+      "width": 1983,
+      "height": 793,
+      "parallaxSpeed": 0.05
+    },
+    {
+      "id": "bg_skyline",
+      "file": "bg-machine-skyline.png",
+      "type": "seamless-background",
+      "status": "approved",
+      "width": 2172,
+      "height": 724,
+      "parallaxSpeed": 0.15
+    },
+    {
+      "id": "bg_midground",
+      "file": "bg-midground.png",
+      "type": "seamless-background",
+      "status": "approved",
+      "width": 1983,
+      "height": 793,
+      "parallaxSpeed": 0.35
+    },
+    {
+      "id": "track_foreground",
+      "file": "track-foreground.png",
+      "type": "seamless-background",
+      "status": "approved",
+      "width": 1983,
+      "height": 793,
+      "parallaxSpeed": 1,
+      "collisionTop": 0.48
+    },
+    {
+      "id": "finale_tower",
+      "file": "finale-tower.png",
+      "type": "scene-piece",
+      "status": "approved",
+      "width": 887,
+      "height": 887,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "human_flag",
+      "file": "human-flag.png",
+      "type": "sprite",
+      "status": "approved",
+      "width": 575,
+      "height": 390,
+      "anchor": {
+        "x": 0,
+        "y": 0.5
+      },
+      "note": "fabric-only crop; game draws the pole separately"
+    },
+    {
+      "id": "question_frame",
+      "file": "question-frame.svg",
+      "type": "ui-frame",
+      "status": "approved",
+      "width": 1200,
+      "height": 620,
+      "safeArea": {
+        "x": 0.1,
+        "y": 0.14,
+        "w": 0.8,
+        "h": 0.72
+      }
+    },
+    {
+      "id": "pitch_drone_triage",
+      "file": "pitch-01-drone-triage.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pitch_reroute_grid",
+      "file": "pitch-02-reroute-grid.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pitch_scan_the_lie",
+      "file": "pitch-03-scan-the-lie.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pitch_balance_scales",
+      "file": "pitch-04-balance-scales.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pitch_freeze_flood",
+      "file": "pitch-05-freeze-flood.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pitch_share_card",
+      "file": "pitch-06-share-card.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pastel_leaky_logic",
+      "file": "pastel-01-leaky-logic.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pastel_feed_pet",
+      "file": "pastel-02-feed-the-right-pet.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pastel_robots_shortcut",
+      "file": "pastel-03-robots-shortcut.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pastel_sprinklers",
+      "file": "pastel-04-sunny-day-sprinklers.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pastel_honey_audit",
+      "file": "pastel-05-honey-audit.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "pastel_share_card",
+      "file": "pastel-06-share-card.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sim_judgment",
+      "file": "simulator-01-judgment.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sim_courage",
+      "file": "simulator-02-courage.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sim_transfer",
+      "file": "simulator-03-transfer.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sim_influence",
+      "file": "simulator-04-influence.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sim_levels",
+      "file": "simulator-05-levels.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sim_credential",
+      "file": "simulator-06-credential.png",
+      "type": "pitch-visual",
+      "status": "approved",
+      "width": 1254,
+      "height": 1254
+    }
+  ]
+}

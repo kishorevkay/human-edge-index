@@ -1,0 +1,3829 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
+
+:root {
+  --paper: #f2e8da;
+  --paper-deep: #e6d4bf;
+  --white: #fffdf9;
+  --navy: #17365f;
+  --navy-soft: #244b76;
+  --ink: #29384a;
+  --muted: #7f746e;
+  --amber: #f2a62b;
+  --amber-soft: #ffe2a3;
+  --coral: #e86657;
+  --teal: #10a7b7;
+  --green: #6f9c77;
+  --rose: #b87979;
+  --line: #d7c5b1;
+  --shadow: 0 22px 70px rgba(53, 43, 37, 0.12);
+  --radius: 28px;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+button,
+textarea { font: inherit; }
+
+button { -webkit-tap-highlight-color: transparent; }
+
+button:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(242, 166, 43, 0.44);
+  outline-offset: 3px;
+}
+
+.atlas-app {
+  min-height: 100vh; min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 7% 3%, rgba(255, 255, 255, 0.8), transparent 27%),
+    radial-gradient(circle at 94% 86%, rgba(232, 102, 87, 0.09), transparent 30%),
+    repeating-linear-gradient(0deg, rgba(41, 56, 74, 0.018) 0 1px, transparent 1px 4px),
+    var(--paper);
+}
+
+.topbar {
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: 210px minmax(250px, 1fr) auto 48px;
+  align-items: center;
+  gap: 18px;
+  padding: 15px clamp(24px, 4vw, 68px) 18px;
+  background: rgba(255, 253, 249, 0.74);
+  border-bottom: 1px solid rgba(106, 88, 73, 0.14);
+  backdrop-filter: blur(18px);
+  position: relative;
+  z-index: 20;
+}
+
+.brand {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.brand img {
+  display: block;
+  /* the ATLAS mark only — CDOE and the divider are cropped out of the asset.
+     The mark is ~2.2:1 where the full lockup was ~3.8:1, so max-height has to
+     rise or the width is never reached. Sized +30% on Kish's call. */
+  width: 172px;
+  max-height: 81px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.topbar-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+}
+
+.topbar-title strong {
+  color: var(--navy);
+  font: 800 14.56px/1 "Manrope", sans-serif;
+  letter-spacing: 0.11em;
+}
+
+.topbar-title span,
+.micro-label,
+.scene-meta,
+.action-label {
+  color: var(--muted);
+  font: 700 11.2px/1.3 "Manrope", sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Score pill, top right. Was `align-items: baseline` with a 9px label against an
+   18px number — the two never lined up and the pill read as broken. Stacked and
+   centred instead, so the number is the object and the label just tags it. */
+.score-chip {
+  height: 46px;
+  min-width: 64px;
+  padding: 5px 14px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  justify-self: end;
+}
+
+.score-chip span {
+  color: var(--muted);
+  font: 800 8.96px/1 "Manrope", sans-serif;
+  letter-spacing: 0.18em;
+}
+
+.score-chip strong {
+  color: var(--navy);
+  font: 800 22.4px/1 "Manrope", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.utility-button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--navy);
+  font: 700 20.16px/1 sans-serif;
+  cursor: pointer;
+}
+
+.section-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 0 clamp(24px, 4vw, 68px);
+}
+
+.section-progress i {
+  height: 3px;
+  background: rgba(23, 54, 95, 0.11);
+  transform-origin: left;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.section-progress i.complete { background: var(--amber); }
+.section-progress i.active { background: var(--navy); animation: progressBreath 1.6s ease-in-out infinite; }
+
+@keyframes progressBreath {
+  50% { opacity: 0.46; }
+}
+
+.screen {
+  min-height: calc(100vh - 92px); min-height: calc(100dvh - 92px);
+  padding: clamp(34px, 5vw, 72px) clamp(24px, 5vw, 80px);
+  animation: screenIn 0.52s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1,
+h2,
+h3,
+p { margin-top: 0; }
+
+h1,
+h2,
+h3 { font-family: "Manrope", sans-serif; }
+
+.primary-button {
+  min-height: 58px;
+  border: 0;
+  border-radius: 18px;
+  padding: 0 10px 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(23, 54, 95, 0.2);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(23, 54, 95, 0.27);
+}
+
+.primary-button:active { transform: translateY(0) scale(0.985); }
+
+.primary-button span {
+  font: 800 12.32px/1 "Manrope", sans-serif;
+  letter-spacing: 0.13em;
+}
+
+.primary-button b {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--amber);
+  color: var(--navy);
+  font-size: 22.4px;
+}
+
+.primary-button.compact {
+  min-height: 48px;
+  border-radius: 14px;
+  padding-left: 18px;
+}
+
+.primary-button.compact b {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+/* Welcome */
+
+.welcome-screen {
+  display: grid;
+  grid-template-columns: minmax(380px, 0.82fr) minmax(520px, 1.18fr);
+  align-items: center;
+  gap: clamp(40px, 7vw, 110px);
+}
+
+.welcome-copy { max-width: 580px; }
+
+.welcome-copy h1 {
+  margin: 12px 0 20px;
+  color: var(--navy);
+  font-size: clamp(69.44px, 7vw, 120.96px);
+  line-height: 0.84;
+  letter-spacing: -0.075em;
+}
+
+.welcome-copy h1 span { color: var(--coral); }
+
+.welcome-copy > p {
+  max-width: 520px;
+  color: #655e59;
+  font-size: clamp(19.04px, 1.5vw, 23.52px);
+  line-height: 1.62;
+}
+
+.welcome-copy .primary-button { margin-top: 14px; }
+
+.welcome-facts {
+  margin-top: 34px;
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 13.44px;
+}
+
+.welcome-facts span { padding-right: 22px; border-right: 1px solid var(--line); }
+.welcome-facts span:last-child { border: 0; }
+.welcome-facts b { color: var(--navy); font: 800 17.92px/1 "Manrope", sans-serif; margin-right: 5px; }
+
+.welcome-scenes {
+  min-height: min(66vh, 640px);
+  position: relative;
+}
+
+.welcome-scenes::before,
+.welcome-scenes::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(23, 54, 95, 0.12);
+  border-radius: 50%;
+  animation: orbit 20s linear infinite;
+}
+
+.welcome-scenes::before { inset: 8% 12%; }
+.welcome-scenes::after { inset: 20% 22%; animation-direction: reverse; animation-duration: 14s; }
+
+@keyframes orbit { to { transform: rotate(360deg); } }
+
+.scene-card {
+  position: absolute;
+  overflow: hidden;
+  border: 8px solid rgba(255, 253, 249, 0.84);
+  border-radius: 36px;
+  box-shadow: var(--shadow);
+  background: var(--white);
+}
+
+.scene-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.card-a {
+  width: 62%;
+  height: 54%;
+  left: 4%;
+  top: 5%;
+  transform: rotate(-5deg);
+  animation: floatA 7s ease-in-out infinite;
+}
+
+.card-b {
+  width: 52%;
+  height: 49%;
+  right: 2%;
+  top: 24%;
+  transform: rotate(4deg);
+  animation: floatB 6.2s ease-in-out infinite;
+}
+
+.card-c {
+  width: 49%;
+  height: 43%;
+  left: 15%;
+  bottom: 1%;
+  transform: rotate(-2deg);
+  animation: floatC 7.6s ease-in-out infinite;
+}
+
+@keyframes floatA { 50% { transform: translateY(-12px) rotate(-3.5deg); } }
+@keyframes floatB { 50% { transform: translateY(10px) rotate(2deg); } }
+@keyframes floatC { 50% { transform: translateY(-9px) rotate(-3.5deg); } }
+
+.welcome-stamp {
+  position: absolute;
+  right: 9%;
+  bottom: 5%;
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: 2px solid var(--navy);
+  border-radius: 50%;
+  background: var(--amber-soft);
+  color: var(--navy);
+  font: 800 13.44px/1.45 "Manrope", sans-serif;
+  letter-spacing: 0.13em;
+  transform: rotate(8deg);
+  box-shadow: 0 14px 34px rgba(53, 43, 37, 0.16);
+}
+
+/* Brief */
+
+.brief-screen { max-width: 1420px; margin: 0 auto; }
+
+.brief-heading {
+  display: grid;
+  grid-template-columns: 0.55fr 1fr;
+  align-items: end;
+  column-gap: 60px;
+  margin-bottom: 34px;
+}
+
+.brief-heading .micro-label { grid-column: 1 / -1; margin-bottom: 12px; }
+
+.brief-heading h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(42.56px, 4vw, 64.96px);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.brief-heading p {
+  margin: 0;
+  max-width: 650px;
+  color: #6f6660;
+  font-size: 20.16px;
+  line-height: 1.6;
+}
+
+.section-map {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.section-map article {
+  min-height: 246px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 253, 249, 0.58);
+  box-shadow: 0 12px 30px rgba(53, 43, 37, 0.05);
+  animation: cardIn 0.55s var(--delay) both;
+}
+
+@keyframes cardIn { from { opacity: 0; transform: translateY(18px); } }
+
+.section-map article > span {
+  color: var(--coral);
+  font: 800 47.04px/1 "Manrope", sans-serif;
+}
+
+.section-map small {
+  color: var(--muted);
+  font: 700 8.96px/1.3 "Manrope", sans-serif;
+  letter-spacing: 0.13em;
+}
+
+.section-map h3 {
+  margin: 8px 0;
+  color: var(--navy);
+  font-size: 21.28px;
+}
+
+.section-map p { margin: 0; color: #756b65; font-size: 14.56px; line-height: 1.5; }
+
+.brief-footer {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brief-footer > div,
+.route-note {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.brief-footer b,
+.route-note b { color: var(--navy); font-size: 14.56px; }
+.brief-footer small,
+.route-note small { grid-column: 2; color: var(--muted); font-size: 12.32px; }
+
+.adaptive-dot {
+  grid-row: 1 / 3;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 0 7px rgba(242, 166, 43, 0.14);
+  animation: adaptivePulse 1.6s ease-in-out infinite;
+}
+
+@keyframes adaptivePulse { 50% { box-shadow: 0 0 0 12px rgba(242, 166, 43, 0); } }
+
+/* Section intro */
+
+.section-intro-screen {
+  display: grid;
+  grid-template-columns: auto minmax(360px, 0.8fr) minmax(460px, 1.2fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 78px);
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.section-number {
+  align-self: start;
+  color: rgba(23, 54, 95, 0.1);
+  font: 800 clamp(125.44px, 12vw, 212.8px)/0.8 "Manrope", sans-serif;
+  letter-spacing: -0.1em;
+}
+
+.section-intro-copy h2 {
+  margin: 10px 0 14px;
+  color: var(--navy);
+  font-size: clamp(47.04px, 4.5vw, 78.4px);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.section-intro-copy > p {
+  color: #6d645e;
+  font-size: 19.04px;
+  line-height: 1.62;
+}
+
+.section-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 26px 0;
+}
+
+.section-rules span {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.45);
+  font-size: 12.32px;
+}
+
+.section-rules b { color: var(--navy); }
+.section-intro-visual { min-width: 0; }
+
+/* Game layout */
+
+.game-screen,
+.feedback-screen {
+  display: grid;
+  grid-template-columns: minmax(460px, 1.15fr) minmax(430px, 0.85fr);
+  gap: clamp(26px, 4vw, 62px);
+  max-width: 1540px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.question-visual,
+.feedback-visual { min-width: 0; }
+
+.scene-meta {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.scene-meta b { color: var(--navy); }
+
+.character-scene {
+  min-height: clamp(410px, 57vh, 650px);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(23, 54, 95, 0.14);
+  border-radius: 38px;
+  background: #ead9c4;
+  box-shadow: var(--shadow), inset 0 0 0 8px rgba(255, 255, 255, 0.24);
+  isolation: isolate;
+}
+
+.character-scene img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.015);
+  animation: characterDrift 10s ease-in-out infinite alternate;
+}
+
+@keyframes characterDrift {
+  to { transform: scale(1.045) translate3d(-0.45%, -0.3%, 0); }
+}
+
+.character-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 238, 0.05) 55%, rgba(41, 56, 74, 0.12)),
+    radial-gradient(circle at 50% 45%, transparent 48%, rgba(66, 48, 38, 0.12) 120%);
+  box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.character-focus {
+  --focus-x: 70%;
+  --focus-y: 50%;
+  --focus-size: 120px;
+  position: absolute;
+  left: var(--focus-x);
+  top: var(--focus-y);
+  width: var(--focus-size);
+  height: var(--focus-size);
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.character-focus i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(242, 166, 43, 0.72);
+  border-radius: 50%;
+  opacity: 0;
+  animation: focusRing 2.6s ease-out infinite;
+}
+
+.character-focus i:nth-child(2) { animation-delay: 1.3s; }
+
+@keyframes focusRing {
+  0% { opacity: 0; transform: scale(0.55); }
+  18% { opacity: 0.72; }
+  82%, 100% { opacity: 0; transform: scale(1.45); }
+}
+
+.character-motion {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.character-motion i {
+  --motion-x: 76%;
+  --motion-y: 28%;
+  position: absolute;
+  left: calc(var(--motion-x) + (var(--n) * 2.8%));
+  top: var(--motion-y);   /* was calc(... % 2 ...) — % is a unit, not an operator, so the whole declaration was dropped */
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 0 5px rgba(242, 166, 43, 0.12);
+  opacity: 0;
+  animation: storyParticle 2.4s calc(var(--n) * 0.24s) ease-in-out infinite;
+}
+
+.character-motion i:nth-child(1) { --n: 0; }
+.character-motion i:nth-child(2) { --n: 1; }
+.character-motion i:nth-child(3) { --n: 2; }
+.character-motion i:nth-child(4) { --n: 3; }
+.character-motion i:nth-child(5) { --n: 4; }
+
+@keyframes storyParticle {
+  0% { opacity: 0; transform: translate3d(-14px, 8px, 0) scale(0.5); }
+  28% { opacity: 0.8; }
+  72% { opacity: 0.34; }
+  100% { opacity: 0; transform: translate3d(28px, -18px, 0) scale(1.35); }
+}
+
+.character-scan {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 7%;
+  height: 2px;
+  z-index: 5;
+  background: linear-gradient(90deg, transparent, rgba(255, 180, 84, 0.85), transparent);
+  opacity: 0;
+  animation: characterScan 5s 1.1s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes characterScan {
+  0%, 12%, 100% { opacity: 0; transform: translateY(0); }
+  24% { opacity: 0.5; }
+  70% { opacity: 0.18; transform: translateY(48vh); }
+  82% { opacity: 0; transform: translateY(48vh); }
+}
+
+.character-scene[data-scene="logic-survivorship"] .character-focus { --focus-x: 76%; --focus-y: 42%; --focus-size: 155px; }
+.character-scene[data-scene="logic-survivorship"] .character-motion { --motion-x: 72%; --motion-y: 21%; }
+
+.character-scene[data-scene="logic-ab-test"] .character-focus { --focus-x: 55%; --focus-y: 48%; --focus-size: 170px; }
+.character-scene[data-scene="logic-ab-test"] .character-motion { --motion-x: 35%; --motion-y: 51%; }
+
+.character-scene[data-scene="logic-scale"] .character-focus { --focus-x: 78%; --focus-y: 39%; --focus-size: 190px; }
+.character-scene[data-scene="logic-scale"] .character-motion { --motion-x: 70%; --motion-y: 26%; }
+.character-scene[data-scene="logic-scale"] .character-motion i { animation-name: fallingFailure; }
+
+@keyframes fallingFailure {
+  0% { opacity: 0; transform: translate3d(0, -18px, 0) rotate(0); }
+  28% { opacity: 0.75; }
+  100% { opacity: 0; transform: translate3d(-16px, 52px, 0) rotate(160deg); }
+}
+
+.character-scene[data-scene="ethics-fairness"] .character-focus { --focus-x: 55%; --focus-y: 78%; --focus-size: 210px; }
+.character-scene[data-scene="ethics-fairness"] .character-motion { --motion-x: 48%; --motion-y: 59%; }
+
+.character-scene[data-scene="ethics-safety"] .character-focus { --focus-x: 66%; --focus-y: 55%; --focus-size: 150px; }
+.character-scene[data-scene="ethics-safety"] .character-motion { --motion-x: 58%; --motion-y: 48%; }
+
+.character-scene[data-scene="strategy-goodhart"] .character-focus { --focus-x: 83%; --focus-y: 26%; --focus-size: 120px; }
+.character-scene[data-scene="strategy-goodhart"] .character-motion { --motion-x: 30%; --motion-y: 71%; }
+.character-scene[data-scene="strategy-goodhart"] .character-motion i { animation-name: holdQueue; }
+
+@keyframes holdQueue {
+  0% { opacity: 0; transform: translateX(-12px); }
+  30% { opacity: 0.7; }
+  100% { opacity: 0; transform: translateX(72px); }
+}
+
+.character-scene[data-scene="strategy-price-test"] .character-focus { --focus-x: 49%; --focus-y: 78%; --focus-size: 132px; }
+.character-scene[data-scene="strategy-price-test"] .character-motion { --motion-x: 45%; --motion-y: 69%; }
+
+.character-scene[data-scene="ethics-bias"] .character-focus { --focus-x: 62%; --focus-y: 52%; --focus-size: 180px; }
+.character-scene[data-scene="ethics-bias"] .character-motion { --motion-x: 52%; --motion-y: 46%; }
+
+.character-scene[data-scene="strategy-counterfactual"] .character-focus { --focus-x: 54%; --focus-y: 70%; --focus-size: 180px; }
+.character-scene[data-scene="strategy-counterfactual"] .character-motion { --motion-x: 48%; --motion-y: 65%; }
+.character-scene[data-scene="strategy-counterfactual"] .character-motion i { animation-name: coinFall; border-radius: 2px; }
+
+@keyframes coinFall {
+  0% { opacity: 0; transform: translateY(-16px) rotate(0); }
+  30% { opacity: 0.8; }
+  100% { opacity: 0; transform: translateY(54px) rotate(240deg); }
+}
+
+.character-scene.is-success { animation: characterSuccess 1s ease both; }
+.character-scene.is-failure { animation: failureShake 0.58s ease both; }
+.character-scene.is-success .character-focus i { border-color: rgba(111, 156, 119, 0.88); animation-duration: 1.5s; }
+.character-scene.is-failure .character-focus i { border-color: rgba(232, 102, 87, 0.88); animation-duration: 0.8s; }
+.character-scene.is-success img { filter: saturate(1.08) brightness(1.035); }
+.character-scene.is-failure img { filter: saturate(0.82) contrast(1.04); }
+
+@keyframes characterSuccess {
+  50% { box-shadow: var(--shadow), inset 0 0 0 8px rgba(111, 156, 119, 0.34); }
+}
+
+.visual-stage {
+  min-height: clamp(410px, 57vh, 650px);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(23, 54, 95, 0.14);
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.86), transparent 28%),
+    linear-gradient(145deg, #e8d9c4, #f7ecdc 55%, #e1cbb2);
+  box-shadow: var(--shadow), inset 0 0 0 8px rgba(255, 255, 255, 0.24);
+  isolation: isolate;
+}
+
+.tone-ethics { background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.88), transparent 28%), linear-gradient(145deg, #e8c9c6, #f7e5dd 55%, #dcb9b2); }
+.tone-strategy { background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.88), transparent 28%), linear-gradient(145deg, #c9d9d0, #e8eadb 55%, #b9d0c7); }
+
+.visual-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: linear-gradient(rgba(23, 54, 95, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(23, 54, 95, 0.3) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle, black, transparent 72%);
+}
+
+.visual-orbit {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  border: 1px solid rgba(23, 54, 95, 0.18);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.orbit-a { width: 58%; aspect-ratio: 1; animation: orbitStage 18s linear infinite; }
+.orbit-b { width: 78%; aspect-ratio: 1; border-style: dashed; animation: orbitStage 27s linear reverse infinite; }
+
+@keyframes orbitStage { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.visual-glyph {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: clamp(180px, 23vw, 320px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--navy);
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.72);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 30px 70px rgba(23, 54, 95, 0.15), inset 0 0 0 12px rgba(242, 166, 43, 0.12);
+  animation: glyphFloat 4s ease-in-out infinite;
+  z-index: 3;
+}
+
+.visual-glyph::before,
+.visual-glyph::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(23, 54, 95, 0.22);
+}
+
+.visual-glyph::before { inset: 16px; }
+.visual-glyph::after { inset: 30px; border-color: rgba(242, 166, 43, 0.46); }
+
+.visual-glyph span {
+  color: var(--navy);
+  font: 800 clamp(47.04px, 6vw, 100.8px)/1 "Manrope", sans-serif;
+  letter-spacing: -0.07em;
+  z-index: 1;
+}
+
+@keyframes glyphFloat {
+  50% { transform: translate(-50%, calc(-50% - 9px)) rotate(1deg); }
+}
+
+.visual-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  max-width: 76%;
+  padding: 12px 18px;
+  border: 1px solid rgba(23, 54, 95, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.76);
+  color: var(--navy);
+  font: 700 12.32px/1.3 "Manrope", sans-serif;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 6;
+  backdrop-filter: blur(8px);
+}
+
+.signal-card {
+  position: absolute;
+  width: 118px;
+  height: 76px;
+  padding: 16px;
+  border: 1px solid rgba(23, 54, 95, 0.22);
+  border-radius: 18px;
+  background: rgba(255, 253, 249, 0.54);
+  box-shadow: 0 16px 30px rgba(23, 54, 95, 0.08);
+  z-index: 2;
+}
+
+.signal-left { left: 10%; top: 20%; transform: rotate(-7deg); }
+.signal-right { right: 10%; top: 61%; transform: rotate(7deg); }
+.signal-card i { display: block; height: 6px; margin-bottom: 7px; border-radius: 6px; background: rgba(23, 54, 95, 0.18); }
+.signal-card i:first-child { width: 70%; background: var(--amber); }
+
+.visual-scan {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--navy), transparent);
+  opacity: 0.28;
+  animation: scan 4.4s ease-in-out infinite;
+  z-index: 8;
+}
+
+@keyframes scan { 50% { transform: translateY(55vh); } }
+
+.visual-particles i {
+  position: absolute;
+  left: calc(13% + (var(--i) * 10%));
+  top: calc(16% + ((var(--i) % 4) * 19%));
+  width: calc(4px + (var(--i) % 3) * 2px);
+  height: calc(4px + (var(--i) % 3) * 2px);
+  border-radius: 50%;
+  background: var(--amber);
+  opacity: 0.45;
+  animation: particle 2.2s calc(var(--i) * -0.19s) ease-in-out infinite;
+}
+
+@keyframes particle { 50% { transform: translateY(-12px) scale(1.5); opacity: 0.14; } }
+
+.visual-stage.is-success { animation: successSettle 1s ease both; }
+.visual-stage.is-failure { animation: failureShake 0.58s ease both; }
+.visual-stage.is-success .visual-glyph { border-color: var(--green); box-shadow: 0 30px 70px rgba(111, 156, 119, 0.25), inset 0 0 0 14px rgba(111, 156, 119, 0.14); }
+.visual-stage.is-failure .visual-glyph { border-color: var(--coral); box-shadow: 0 30px 70px rgba(232, 102, 87, 0.24), inset 0 0 0 14px rgba(232, 102, 87, 0.14); }
+
+@keyframes successSettle { 50% { filter: saturate(1.2) brightness(1.03); } }
+@keyframes failureShake { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+
+.decision-panel,
+.feedback-panel {
+  max-width: 610px;
+  padding: 4px 0;
+}
+
+.round-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 62px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.round-meta > span {
+  color: var(--navy);
+  font: 800 12.32px/1 "Manrope", sans-serif;
+  letter-spacing: 0.16em;
+}
+
+.timer {
+  min-width: 88px;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: baseline;
+  justify-content: end;
+  gap: 5px;
+  color: var(--navy);
+}
+
+.timer b { font: 800 28px/1 "Manrope", sans-serif; }
+.timer small { color: var(--muted); font: 800 8.96px/1 "Manrope", sans-serif; letter-spacing: 0.14em; }
+.timer i { grid-column: 1 / -1; width: 88px; height: 4px; overflow: hidden; border-radius: 4px; background: rgba(23, 54, 95, 0.12); }
+.timer em { display: block; width: 100%; height: 100%; transform-origin: left; background: var(--navy); }
+.timer.urgent b { color: var(--coral); animation: urgent 0.65s ease-in-out infinite alternate; }
+.timer.urgent em { background: var(--coral); }
+@keyframes urgent { to { opacity: 0.42; } }
+
+.decision-panel h2,
+.feedback-panel h2 {
+  margin: 8px 0 10px;
+  color: var(--navy);
+  font-size: clamp(38.08px, 3.8vw, 64.96px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.question-copy {
+  margin-bottom: 18px;
+  color: #655e59;
+  font-size: clamp(16.8px, 1.25vw, 20.16px);
+  line-height: 1.58;
+}
+
+.axiom-panel {
+  position: relative;
+  overflow: hidden;
+  margin: 16px 0;
+  padding: 15px 17px;
+  border-left: 3px solid var(--navy);
+  border-radius: 4px 16px 16px 4px;
+  background: rgba(23, 54, 95, 0.07);
+}
+
+.axiom-panel span {
+  color: var(--navy);
+  font: 800 10.08px/1 "Manrope", sans-serif;
+  letter-spacing: 0.18em;
+}
+
+.axiom-panel p { margin: 6px 0 0; color: var(--navy-soft); font-size: 14.56px; line-height: 1.55; }
+.axiom-panel i { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(23, 54, 95, 0.025) 3px 4px); pointer-events: none; }
+
+.binary-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.decision-button {
+  min-height: 130px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+  border: 1px solid;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.48);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.decision-button:hover { transform: translateY(-3px); }
+.decision-button.machine { border-color: rgba(23, 54, 95, 0.35); color: var(--navy); }
+.decision-button.human { border-color: rgba(242, 166, 43, 0.74); color: #9a5f00; }
+.decision-button.machine:hover { background: rgba(23, 54, 95, 0.08); box-shadow: 0 16px 28px rgba(23, 54, 95, 0.1); }
+.decision-button.human:hover { background: rgba(242, 166, 43, 0.12); box-shadow: 0 16px 28px rgba(242, 166, 43, 0.13); }
+.decision-button > span { font: 800 10.08px/1 "Manrope", sans-serif; letter-spacing: 0.16em; opacity: 0.55; }
+.decision-button strong { font: 800 20.16px/1 "Manrope", sans-serif; letter-spacing: 0.03em; }
+.decision-button small { color: var(--muted); font-size: 12.32px; }
+
+.action-stack { display: flex; flex-direction: column; gap: 8px; }
+.action-label { margin-bottom: 3px; color: var(--coral); }
+
+.line-option {
+  min-height: 54px;
+  display: grid;
+  grid-template-columns: 35px 1fr;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.46);
+  color: #5e5854;
+  font-size: 14.56px;
+  line-height: 1.42;
+  cursor: pointer;
+  transition: border-color 0.16s, transform 0.16s, background 0.16s;
+  animation: optionIn 0.35s both;
+}
+
+.line-option:nth-child(2) { animation-delay: 0.05s; }
+.line-option:nth-child(3) { animation-delay: 0.1s; }
+.line-option:nth-child(4) { animation-delay: 0.15s; }
+
+@keyframes optionIn { from { opacity: 0; transform: translateX(10px); } }
+
+.line-option:hover { border-color: var(--amber); background: rgba(255, 253, 249, 0.9); transform: translateX(3px); }
+.line-option span { color: var(--navy); font: 800 11.2px/1 "Manrope", sans-serif; }
+
+.text-action label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--navy);
+  font: 700 14.56px/1.4 "Manrope", sans-serif;
+}
+
+.text-action textarea {
+  width: 100%;
+  min-height: 136px;
+  resize: vertical;
+  padding: 15px 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 253, 249, 0.7);
+  color: var(--ink);
+  font-size: 16.8px;
+  line-height: 1.55;
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.28);
+}
+
+.text-action textarea::placeholder { color: #a19790; }
+.text-action > div { margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.text-action > div > small { color: var(--muted); font-size: 11.2px; }
+.text-action > div > small b { color: var(--navy); }
+
+/* Feedback */
+
+.feedback-score { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.feedback-score h2 { max-width: 430px; }
+.feedback-score > strong { color: var(--amber); font: 800 clamp(47.04px, 4vw, 69.44px)/0.9 "Manrope", sans-serif; letter-spacing: -0.06em; }
+.feedback-score > strong small { color: var(--muted); font-size: 16.8px; letter-spacing: 0; }
+.feedback-screen.failure .feedback-score > strong { color: var(--coral); }
+
+.feedback-chip {
+  display: inline-block;
+  margin: 5px 0 14px;
+  padding: 7px 11px;
+  border: 1px solid var(--amber);
+  border-radius: 999px;
+  color: #9a5f00;
+  background: rgba(242, 166, 43, 0.1);
+  font: 800 10.08px/1 "Manrope", sans-serif;
+  letter-spacing: 0.14em;
+}
+
+.failure .feedback-chip { color: var(--coral); border-color: var(--coral); background: rgba(232, 102, 87, 0.08); }
+.feedback-panel > p { color: #655e59; font-size: 17.92px; line-height: 1.62; }
+.route-note { margin: 20px 0; padding: 14px 15px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, 0.42); }
+.route-note .adaptive-dot { width: 8px; height: 8px; }
+
+.snap-recap { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+.snap-recap span { padding: 6px 9px; border-radius: 999px; font-size: 11.2px; background: rgba(23, 54, 95, 0.06); color: var(--muted); }
+.snap-recap span.right { color: var(--green); background: rgba(111, 156, 119, 0.1); }
+.snap-recap span.wrong { color: var(--coral); background: rgba(232, 102, 87, 0.08); }
+
+/* Results */
+
+.results-screen {
+  display: grid;
+  grid-template-columns: minmax(400px, 0.82fr) minmax(520px, 1.18fr);
+  align-items: center;
+  gap: clamp(40px, 7vw, 110px);
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.results-copy h2 {
+  margin: 10px 0 14px;
+  color: var(--navy);
+  font-size: clamp(53.76px, 5vw, 85.12px);
+  line-height: 0.93;
+  letter-spacing: -0.06em;
+}
+
+.results-copy > p { max-width: 560px; color: #675f5a; font-size: 19.04px; line-height: 1.65; }
+
+.result-callouts { display: flex; gap: 10px; margin: 25px 0; }
+.result-callouts article { min-width: 150px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, 0.45); }
+.result-callouts span { display: block; color: var(--muted); font: 800 8.96px/1 "Manrope", sans-serif; letter-spacing: 0.14em; }
+.result-callouts strong { display: block; margin-top: 7px; color: var(--navy); font: 800 16.8px/1 "Manrope", sans-serif; }
+
+.profile-card {
+  padding: clamp(22px, 3vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: 34px;
+  background: rgba(255, 253, 249, 0.7);
+  box-shadow: var(--shadow);
+}
+
+.hei-card {
+  min-height: 175px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border-radius: 26px;
+  background: var(--navy);
+  color: #fff;
+}
+
+.hei-card span { color: #b9c9de; font: 800 10.08px/1 "Manrope", sans-serif; letter-spacing: 0.18em; }
+.hei-card strong { color: var(--amber); font: 800 clamp(76.16px, 7vw, 116.48px)/0.95 "Manrope", sans-serif; letter-spacing: -0.08em; animation: scorePop 0.85s cubic-bezier(0.2, 1.2, 0.4, 1) both; }
+.hei-card small { color: #b9c9de; font: 700 10.08px/1 "Manrope", sans-serif; letter-spacing: 0.16em; }
+
+@keyframes scorePop { from { opacity: 0; transform: scale(0.4); } }
+
+.section-results { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 17px; }
+.section-results > div { display: grid; grid-template-columns: 1fr 55px auto; align-items: center; gap: 8px; padding: 10px 11px; border: 1px solid rgba(215, 197, 177, 0.7); border-radius: 13px; }
+.section-results span { color: var(--navy); font: 700 10.08px/1.25 "Manrope", sans-serif; letter-spacing: 0.06em; }
+.section-results b { color: var(--navy); font: 800 14.56px/1 "Manrope", sans-serif; }
+.section-results i,
+.trait-results i { height: 5px; overflow: hidden; border-radius: 5px; background: rgba(23, 54, 95, 0.1); }
+.section-results em,
+.trait-results em { display: block; width: 100%; height: 100%; background: var(--amber); transform: scaleX(var(--score)); transform-origin: left; animation: barGrow 0.9s ease both; }
+
+@keyframes barGrow { from { transform: scaleX(0); } }
+
+.trait-results { margin-top: 17px; padding-top: 14px; border-top: 1px solid var(--line); }
+.trait-results > div { display: grid; grid-template-columns: 140px 1fr 30px; align-items: center; gap: 10px; margin: 9px 0; }
+.trait-results span { color: var(--muted); font-size: 12.32px; }
+.trait-results b { color: var(--navy); font: 800 12.32px/1 "Manrope", sans-serif; text-align: right; }
+.trait-results em { background: var(--navy); }
+
+.page-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 100; overflow: hidden; }
+.page-confetti i { position: absolute; left: var(--left); top: -20px; width: 8px; height: 14px; border-radius: 2px; background: var(--color); animation: confetti var(--duration) var(--delay) linear both; }
+@keyframes confetti { to { transform: translateY(108vh) rotate(720deg); opacity: 0.1; } }
+
+@media (max-height: 800px) and (min-width: 901px) {
+  .screen { padding-top: 28px; padding-bottom: 28px; }
+  .visual-stage,
+  .character-scene { min-height: calc(100vh - 168px); max-height: 590px; }
+  .welcome-scenes { min-height: 540px; }
+  .section-map article { min-height: 210px; }
+  .question-copy { font-size: 16.8px; line-height: 1.48; }
+  .decision-panel h2 { font-size: 44.8px; }
+  .line-option { min-height: 49px; padding-top: 8px; padding-bottom: 8px; }
+  .text-action textarea { min-height: 108px; }
+}
+
+@media (max-width: 1100px) {
+  .topbar { grid-template-columns: 180px 1fr auto 46px; }
+  .brand img { width: 153px; }
+  .welcome-screen,
+  .game-screen,
+  .feedback-screen,
+  .results-screen { gap: 28px; }
+  .welcome-screen { grid-template-columns: 0.8fr 1.2fr; }
+  .game-screen,
+  .feedback-screen { grid-template-columns: 1fr 0.9fr; }
+  .visual-stage,
+  .character-scene { min-height: 450px; }
+  .section-intro-screen { grid-template-columns: 110px 0.9fr 1.1fr; }
+}
+
+@media (max-width: 900px) {
+  .topbar { grid-template-columns: 1fr auto auto; padding-inline: 20px; }
+  .topbar-title { display: none; }
+  .section-progress { padding-inline: 20px; }
+  .screen { min-height: calc(100vh - 92px); min-height: calc(100dvh - 92px); padding: 30px 20px 48px; }
+  .welcome-screen,
+  .game-screen,
+  .feedback-screen,
+  .results-screen,
+  .section-intro-screen { grid-template-columns: 1fr; }
+  .welcome-scenes { min-height: 520px; }
+  .section-map { grid-template-columns: 1fr 1fr; }
+  .brief-heading { grid-template-columns: 1fr; gap: 12px; }
+  .section-number { display: none; }
+  .section-intro-visual { order: -1; }
+  .section-intro-visual .visual-stage { min-height: 330px; }
+  .game-screen,
+  .feedback-screen { align-items: start; }
+  .visual-stage,
+  .character-scene { min-height: 420px; }
+  .decision-panel,
+  .feedback-panel { max-width: none; }
+}
+
+@media (max-width: 600px) {
+  .brand img { width: 125px; }
+  .score-chip { min-width: 68px; padding-inline: 9px; }
+  .welcome-copy h1 { font-size: 71.68px; }
+  .welcome-scenes { min-height: 400px; }
+  .welcome-stamp { width: 92px; height: 92px; font-size: 10.08px; }
+  .welcome-facts { gap: 10px; }
+  .welcome-facts span { width: 100%; border: 0; padding: 0; }
+  .section-map { grid-template-columns: 1fr; }
+  .section-map article { min-height: 180px; }
+  .brief-footer { align-items: stretch; flex-direction: column; }
+  .brief-footer .primary-button { width: 100%; }
+  .visual-stage,
+  .character-scene { min-height: 330px; border-radius: 26px; }
+  .binary-actions { grid-template-columns: 1fr; }
+  .decision-button { min-height: 100px; }
+  .text-action > div { align-items: stretch; flex-direction: column; }
+  .result-callouts { flex-direction: column; }
+  .section-results { grid-template-columns: 1fr; }
+  .trait-results > div { grid-template-columns: 115px 1fr 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------- pilot identity gate */
+
+.pilot-gate {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 460px;
+}
+
+.pilot-fields {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.pilot-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.pilot-field > span {
+  font: 800 10.08px/1 "Manrope", sans-serif;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pilot-field > span em {
+  font: 700 10.08px/1 "Manrope", sans-serif;
+  letter-spacing: 0.12em;
+  font-style: normal;
+  color: var(--line);
+}
+
+.pilot-field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--ink);
+  font: 600 17.92px/1 "Manrope", sans-serif;  /* <16px force-zooms iOS Safari on focus */
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.pilot-field input::placeholder {
+  color: var(--line);
+  font-weight: 500;
+}
+
+.pilot-field input:focus {
+  outline: 0;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(23, 54, 95, 0.12);
+}
+
+.pilot-note {
+  font: 500 12.32px/1.5 "Manrope", sans-serif;
+  color: var(--muted);
+  margin: 0;
+  max-width: 380px;
+}
+
+.pilot-error {
+  font: 700 12.32px/1.4 "Manrope", sans-serif;
+  color: var(--coral);
+  margin: 0;
+}
+
+.pilot-gate .primary-button { margin-top: 2px; }
+
+.pilot-known {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 15px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+}
+
+.pilot-known > span {
+  font: 800 10.08px/1 "Manrope", sans-serif;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.pilot-known strong {
+  font: 800 14.56px/1 "Manrope", sans-serif;
+  color: var(--navy);
+}
+
+.pilot-known button {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: 700 12.32px/1 "Manrope", sans-serif;
+  color: var(--coral);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .pilot-fields { grid-template-columns: 1fr; }
+  .pilot-gate { max-width: 100%; }
+}
+
+/* ============================================================
+   MASSY REDESIGN (2026-08-14) — one-thumb question frame
+   83% of pilot sessions were mobile, and .character-scene's 410px
+   min-height pushed the answer buttons below the fold while the
+   clock ran. 13 sessions reached a question and never answered.
+   ============================================================ */
+
+.thumb-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Tap cards — OUT-THINK IT (replaces the textarea) */
+.option-cards .line-option { text-align: left; }
+
+/* Tap-the-gap tiles — THE BLIND SPOT */
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.gap-tile {
+  min-height: 84px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(23, 54, 95, 0.16);
+  background: #fffaf2;
+  color: var(--navy, #17365f);
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+
+.gap-tile:hover,
+.gap-tile:focus-visible { border-color: rgba(23, 54, 95, 0.4); background: #fff; }
+.gap-tile:active { transform: scale(0.97); }
+
+/* Warm-up: no clock, no score chrome, calmer frame */
+.game-screen.warmup .scene-meta b {
+  background: rgba(23, 54, 95, 0.08);
+  color: var(--navy, #17365f);
+}
+
+@media (max-width: 820px) {
+  .game-screen {
+    display: flex;
+    flex-direction: column;
+    /* Locked to exactly one screen, not min-height. With min-height the column
+       grew past the viewport and the sticky thumb bar had nothing to stick to,
+       putting the answers below the fold again. Fixed height + an internally
+       scrolling decision panel means the buttons are always on screen, so the
+       hero can be full size. */
+    height: calc(100dvh - 92px);
+    min-height: 0;
+    overflow: hidden;
+    padding: 12px 16px 0;
+    gap: 12px;
+    /* The ≤900px block sets align-items:start for the GRID layout, where it
+       means vertical. Once this becomes a column flex container it means
+       horizontal instead, and every child collapses to content width — the
+       hero has an absolutely-positioned img, so it had no width to collapse
+       to and shrank to ~195px on a 375px screen. Stretch restores full width. */
+    align-items: stretch;
+  }
+
+  /* Square hero, same as the feedback screen. The thumb bar is sticky, so the
+     answer buttons stay pinned regardless of how tall this gets — the height
+     cap is only here so the question text isn't pushed off on short phones. */
+  /* The hero absorbs whatever height is left after the text and the buttons,
+     instead of being pinned to a guessed vh. It's therefore as large as the
+     device allows on every phone, and can never be the thing that pushes
+     AXIOM's claim or the answers off screen. */
+  .game-screen .question-visual {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .game-screen .character-scene {
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+    min-height: 150px;
+    max-height: 52vh;
+    border-radius: 24px;
+  }
+  .game-screen .character-scene img { object-fit: cover; }
+
+  .game-screen .decision-panel {
+    /* Natural height and no internal scroll — the hero flexes around it now,
+       so the question text is never the thing that has to give. */
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+  }
+  /* Compacted to buy back the height the full-size hero takes. AXIOM's claim
+     is the question — it has to be readable without scrolling while the
+     clock runs, so the text tightens rather than the image shrinking. */
+  .game-screen .decision-panel h2 { font-size: 1.34rem; margin: 0 0 4px; line-height: 1.2; }
+  .game-screen .question-copy { font-size: 1.06rem; line-height: 1.34; margin: 0 0 8px; }
+  .game-screen .round-meta { margin: 0 0 4px; padding: 0 0 6px; }
+  .game-screen .round-meta span { font-size: 0.67rem; }
+  .game-screen .decision-panel .micro-label { margin: 0 0 2px; font-size: 0.67rem; }
+  .game-screen .axiom-panel { padding: 10px 14px; margin: 0; }
+  .game-screen .axiom-panel span { font-size: 0.65rem; }
+  .game-screen .axiom-panel p { font-size: 1.06rem; line-height: 1.32; margin: 4px 0 0; }
+  .game-screen .scene-meta { margin: 0 0 6px; }
+
+  /* Answers + clock pinned to the thumb, above the home indicator */
+  .game-screen .thumb-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 4;
+    padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+    margin-top: auto;
+    background: linear-gradient(180deg, rgba(247, 240, 229, 0) 0%, var(--paper, #f7f0e5) 22%);
+  }
+
+  .game-screen .binary-actions { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .game-screen .decision-button { padding: 14px 12px; }
+  .game-screen .decision-button small { display: none; }
+  .game-screen .line-option { padding: 13px 14px; font-size: 1.05rem; }
+  .gap-tile { min-height: 76px; font-size: 1.01rem; }
+}
+
+@media (max-width: 380px) {
+  .game-screen .character-scene { min-height: 130px; }
+  .gap-tile { min-height: 68px; font-size: 0.96rem; padding: 12px; }
+}
+
+/* Results: the score is the hero, directly under the profile name and above the
+   replay button (it used to render below the fold, under two stat boxes). */
+.hei-card.hero {
+  margin: 8px 0 18px;
+  width: 100%;
+}
+
+.results-copy #play-again { margin-top: 4px; }
+
+@media (max-width: 820px) {
+  .hei-card.hero { margin: 6px 0 16px; }
+  .hei-card.hero strong { font-size: clamp(62.72px, 17vw, 94.08px); line-height: 1; }
+}
+
+/* ---------- HEI BADGE (results hero) ---------- */
+.hei-badge-wrap { margin: 10px 0 20px; text-align: center; }
+.hei-badge { position: relative; width: min(230px, 62vw); aspect-ratio: 1; margin: 0 auto; }
+.hei-badge img { width: 100%; height: 100%; display: block; }
+.hei-badge-num {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.hei-badge-num b {
+  font: 800 clamp(64.96px, 17vw, 103.04px)/1 "Manrope", sans-serif;
+  color: var(--navy, #16294A); letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+}
+.hei-badge-num i {
+  font-style: normal; font: 800 13.44px/1 "Manrope", sans-serif;
+  letter-spacing: 0.24em; color: var(--navy, #16294A); opacity: 0.6; margin-top: 5px;
+}
+.hei-badge-band {
+  margin-top: 12px; font: 800 14.56px/1 "Manrope", sans-serif;
+  letter-spacing: 0.22em; color: var(--ox, #7A2A34);
+}
+.cracked-award {
+  margin: 16px auto 0; display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 16px 8px 8px; border-radius: 999px;
+  background: rgba(22, 41, 74, 0.06); border: 1px solid rgba(22, 41, 74, 0.16);
+}
+.cracked-award img { width: 40px; height: 40px; display: block; }
+.cracked-award span { text-align: left; font: 800 11.2px/1.3 "Manrope", sans-serif; letter-spacing: 0.16em; color: var(--navy, #16294A); }
+.cracked-award b { display: block; font-size: 19.04px; color: var(--amber, #D98E2B); letter-spacing: 0; }
+
+/* ---------- TIER PICKER (screen 2) ---------- */
+.tier-screen { display: flex; flex-direction: column; justify-content: center; gap: 26px; }
+.tier-head h2 { font-size: clamp(33.6px, 6vw, 58.24px); margin: 6px 0 8px; }
+.tier-sub { color: var(--muted); font-size: 17.92px; margin: 0; }
+.tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.tier-card {
+  text-align: left; cursor: pointer; padding: 22px 20px 18px;
+  border: 1px solid var(--line); border-radius: 22px; background: #fffdf9;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+  font: inherit;
+}
+.tier-card:hover { transform: translateY(-3px); border-color: var(--navy); box-shadow: 0 14px 34px rgba(23,54,95,.12); }
+.tier-index { font: 800 29.12px/1 "Manrope", sans-serif; color: var(--coral, #E85D4F); }
+.tier-card strong { font: 800 22.4px/1.1 "Manrope", sans-serif; color: var(--navy); letter-spacing: .02em; }
+.tier-card em {
+  font-style: italic; font-size: 16.24px; line-height: 1.45; color: var(--ink);
+  border-left: 3px solid var(--amber, #D98E2B); padding-left: 10px;
+}
+.tier-card small { font-size: 14.56px; color: var(--muted); }
+.tier-cap {
+  margin-top: auto; font: 800 11.2px/1 "Manrope", sans-serif;
+  letter-spacing: .18em; color: var(--muted); padding-top: 8px;
+}
+.tier-foot { font-size: 14.56px; color: var(--muted); margin: 0; }
+@media (max-width: 820px) {
+  .tier-screen { padding: 18px 16px 28px; gap: 18px; }
+  .tier-grid { grid-template-columns: 1fr; gap: 12px; }
+  .tier-card { padding: 16px 16px 14px; gap: 6px; }
+  .tier-card em { font-size: 15.68px; }
+  .tier-head h2 { font-size: 33.6px; }
+}
+
+/* ---------- SCENE ANIMATION COORDS (27 new scenes, delivered 2026-08-14) ----------
+   focus = the pulsing ring on the thing that matters; motion = drifting particles.
+   Coordinates supplied per-scene with the artwork. ---------- */
+.character-scene[data-scene="snap-traffic"] .character-focus { --focus-x: 54%; --focus-y: 50%; --focus-size: 190px; }
+.character-scene[data-scene="snap-traffic"] .character-motion { --motion-x: 50%; --motion-y: 50%; }
+.character-scene[data-scene="snap-traffic"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="snap-drone-nest"] .character-focus { --focus-x: 70%; --focus-y: 32%; --focus-size: 190px; }
+.character-scene[data-scene="snap-drone-nest"] .character-motion { --motion-x: 58%; --motion-y: 25%; }
+.character-scene[data-scene="snap-drone-nest"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="snap-pizzas"] .character-focus { --focus-x: 52%; --focus-y: 52%; --focus-size: 190px; }
+.character-scene[data-scene="snap-pizzas"] .character-motion { --motion-x: 50%; --motion-y: 42%; }
+.character-scene[data-scene="snap-pizzas"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="snap-candy"] .character-focus { --focus-x: 57%; --focus-y: 45%; --focus-size: 190px; }
+.character-scene[data-scene="snap-candy"] .character-motion { --motion-x: 56%; --motion-y: 35%; }
+.character-scene[data-scene="snap-candy"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="snap-review"] .character-focus { --focus-x: 51%; --focus-y: 57%; --focus-size: 185px; }
+.character-scene[data-scene="snap-review"] .character-motion { --motion-x: 56%; --motion-y: 46%; }
+.character-scene[data-scene="snap-grandpa"] .character-focus { --focus-x: 49%; --focus-y: 48%; --focus-size: 185px; }
+.character-scene[data-scene="snap-grandpa"] .character-motion { --motion-x: 75%; --motion-y: 38%; }
+.character-scene[data-scene="snap-bakery"] .character-focus { --focus-x: 55%; --focus-y: 53%; --focus-size: 190px; }
+.character-scene[data-scene="snap-bakery"] .character-motion { --motion-x: 78%; --motion-y: 50%; }
+.character-scene[data-scene="snap-bakery"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="snap-price-war"] .character-focus { --focus-x: 52%; --focus-y: 55%; --focus-size: 190px; }
+.character-scene[data-scene="snap-price-war"] .character-motion { --motion-x: 50%; --motion-y: 68%; }
+.character-scene[data-scene="snap-price-war"] .character-motion i { animation-name: coinFall; }
+.character-scene[data-scene="snap-celebrity"] .character-focus { --focus-x: 56%; --focus-y: 42%; --focus-size: 190px; }
+.character-scene[data-scene="snap-celebrity"] .character-motion { --motion-x: 23%; --motion-y: 30%; }
+.character-scene[data-scene="snap-celebrity"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="counter-elevator"] .character-focus { --focus-x: 55%; --focus-y: 56%; --focus-size: 190px; }
+.character-scene[data-scene="counter-elevator"] .character-motion { --motion-x: 80%; --motion-y: 55%; }
+.character-scene[data-scene="counter-elevator"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="counter-empathy"] .character-focus { --focus-x: 56%; --focus-y: 56%; --focus-size: 185px; }
+.character-scene[data-scene="counter-empathy"] .character-motion { --motion-x: 66%; --motion-y: 58%; }
+.character-scene[data-scene="counter-gym"] .character-focus { --focus-x: 54%; --focus-y: 50%; --focus-size: 190px; }
+.character-scene[data-scene="counter-gym"] .character-motion { --motion-x: 25%; --motion-y: 28%; }
+.character-scene[data-scene="counter-gym"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="counter-password"] .character-focus { --focus-x: 58%; --focus-y: 52%; --focus-size: 190px; }
+.character-scene[data-scene="counter-password"] .character-motion { --motion-x: 71%; --motion-y: 56%; }
+.character-scene[data-scene="counter-password"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="counter-checkout"] .character-focus { --focus-x: 48%; --focus-y: 52%; --focus-size: 190px; }
+.character-scene[data-scene="counter-checkout"] .character-motion { --motion-x: 24%; --motion-y: 55%; }
+.character-scene[data-scene="counter-checkout"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="counter-nurse"] .character-focus { --focus-x: 56%; --focus-y: 52%; --focus-size: 185px; }
+.character-scene[data-scene="counter-nurse"] .character-motion { --motion-x: 42%; --motion-y: 35%; }
+.character-scene[data-scene="counter-nurse"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="counter-shy-student"] .character-focus { --focus-x: 50%; --focus-y: 48%; --focus-size: 185px; }
+.character-scene[data-scene="counter-shy-student"] .character-motion { --motion-x: 55%; --motion-y: 37%; }
+.character-scene[data-scene="counter-shy-student"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="counter-no-show"] .character-focus { --focus-x: 56%; --focus-y: 52%; --focus-size: 190px; }
+.character-scene[data-scene="counter-no-show"] .character-motion { --motion-x: 16%; --motion-y: 40%; }
+.character-scene[data-scene="counter-no-show"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="counter-delivery-eta"] .character-focus { --focus-x: 52%; --focus-y: 57%; --focus-size: 190px; }
+.character-scene[data-scene="counter-delivery-eta"] .character-motion { --motion-x: 35%; --motion-y: 37%; }
+.character-scene[data-scene="counter-delivery-eta"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="blind-er"] .character-focus { --focus-x: 57%; --focus-y: 55%; --focus-size: 195px; }
+.character-scene[data-scene="blind-er"] .character-motion { --motion-x: 75%; --motion-y: 76%; }
+.character-scene[data-scene="blind-er"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="blind-exam"] .character-focus { --focus-x: 59%; --focus-y: 49%; --focus-size: 185px; }
+.character-scene[data-scene="blind-exam"] .character-motion { --motion-x: 76%; --motion-y: 27%; }
+.character-scene[data-scene="blind-exam"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="blind-flood"] .character-focus { --focus-x: 58%; --focus-y: 58%; --focus-size: 190px; }
+.character-scene[data-scene="blind-flood"] .character-motion { --motion-x: 47%; --motion-y: 32%; }
+.character-scene[data-scene="blind-flood"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="blind-ambulance-route"] .character-focus { --focus-x: 64%; --focus-y: 50%; --focus-size: 190px; }
+.character-scene[data-scene="blind-ambulance-route"] .character-motion { --motion-x: 72%; --motion-y: 38%; }
+.character-scene[data-scene="blind-ambulance-route"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="blind-keystrokes"] .character-focus { --focus-x: 58%; --focus-y: 55%; --focus-size: 190px; }
+.character-scene[data-scene="blind-keystrokes"] .character-motion { --motion-x: 72%; --motion-y: 30%; }
+.character-scene[data-scene="blind-face-attendance"] .character-focus { --focus-x: 61%; --focus-y: 57%; --focus-size: 190px; }
+.character-scene[data-scene="blind-face-attendance"] .character-motion { --motion-x: 62%; --motion-y: 43%; }
+.character-scene[data-scene="blind-face-attendance"] .character-motion i { animation-name: fallingFailure; }
+.character-scene[data-scene="blind-wearable-insurance"] .character-focus { --focus-x: 59%; --focus-y: 60%; --focus-size: 190px; }
+.character-scene[data-scene="blind-wearable-insurance"] .character-motion { --motion-x: 61%; --motion-y: 27%; }
+.character-scene[data-scene="blind-wearable-insurance"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="blind-festival-stock"] .character-focus { --focus-x: 54%; --focus-y: 52%; --focus-size: 190px; }
+.character-scene[data-scene="blind-festival-stock"] .character-motion { --motion-x: 79%; --motion-y: 36%; }
+.character-scene[data-scene="blind-festival-stock"] .character-motion i { animation-name: holdQueue; }
+.character-scene[data-scene="blind-driver-heatmap"] .character-focus { --focus-x: 53%; --focus-y: 52%; --focus-size: 195px; }
+.character-scene[data-scene="blind-driver-heatmap"] .character-motion { --motion-x: 38%; --motion-y: 48%; }
+.character-scene[data-scene="blind-driver-heatmap"] .character-motion i { animation-name: holdQueue; }
+
+/* ---------- SHARE CARD ---------- */
+/* Share is the primary action on the results screen and Play Again steps
+   down to a ghost — the score has just landed, sending it beats redoing it. */
+.share-button {
+  background: linear-gradient(135deg, var(--ox, #7A2A34), #B8442F 62%, var(--amber, #D98E2B));
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 16px 34px rgba(122, 42, 52, 0.28);
+}
+.share-button:disabled { opacity: 0.62; cursor: progress; transform: none; }
+
+.ghost-button {
+  min-height: 52px;
+  margin-top: 12px;
+  border: 1.5px solid rgba(22, 41, 74, 0.22);
+  border-radius: 18px;
+  padding: 0 10px 0 22px;
+  width: 100%;
+  max-width: 340px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  background: transparent;
+  color: var(--navy, #16294A);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.ghost-button:hover { background: rgba(22, 41, 74, 0.05); border-color: rgba(22, 41, 74, 0.4); }
+.ghost-button span { font: 800 14.56px/1 "Manrope", sans-serif; letter-spacing: 0.16em; }
+.ghost-button b {
+  width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center;
+  background: rgba(22, 41, 74, 0.08); font-size: 16.8px;
+}
+
+.share-status {
+  min-height: 18px;
+  margin-top: 10px;
+  font: 600 13.44px/1.4 "DM Sans", sans-serif;
+  color: rgba(22, 41, 74, 0.66);
+  max-width: 340px;
+}
+
+/* ============================================================
+   HIERARCHY PASS (2026-08-18) — Atlas team review
+   Ranked by visual weight, the QUESTION was 7th of 7 elements on
+   the question screen (10px) while the timer read 2nd (28px). The
+   eye hit picture -> timer -> answers -> "what was I asked?".
+   Everything below re-ranks: question up, chrome down.
+   ============================================================ */
+
+/* 1. THE QUESTION — was 10px coral caps, smaller than its own answers. */
+.action-label {
+  color: var(--navy, #16294A);
+  font: 700 1.18rem/1.32 "DM Sans", system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  margin-bottom: 10px;
+}
+.action-stack .action-label,
+.option-cards .action-label { color: var(--navy, #16294A); }
+
+/* 2. TIMER — the moving bar carries urgency; the number doesn't need to shout.
+   Atlas note: "timer is still fine cause it moves, so noticeable". */
+.timer b { font-size: 1.48rem; }
+
+/* 3. ADMIN CHROME — the pip bar above already says which question this is,
+   so this line stops competing with content. */
+.round-meta span { color: rgba(23, 54, 95, 0.42); font-weight: 700; }
+
+/* 4. ANSWER SYMMETRY — "human" had an amber border AND amber text while
+   "machine" was plain navy. Warm saturated colour is more salient, so one of
+   two options was visually louder on every binary question in the game. This
+   app outputs a score, so that's a response bias sitting inside the
+   instrument. Both options now read identically until chosen. */
+.decision-button.machine,
+.decision-button.human { border-color: rgba(23, 54, 95, 0.3); color: var(--navy, #16294A); }
+.decision-button.machine:hover,
+.decision-button.human:hover {
+  background: rgba(23, 54, 95, 0.07);
+  box-shadow: 0 16px 28px rgba(23, 54, 95, 0.1);
+}
+
+/* 5. PROGRESS — one pip per question (12), grouped by section (4). */
+.section-progress { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.progress-group { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+.progress-group i {
+  height: 3px;
+  background: rgba(23, 54, 95, 0.11);
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+.progress-group i.complete { background: var(--amber, #D98E2B); }
+.progress-group i.active { background: var(--navy, #16294A); animation: progressBreath 1.6s ease-in-out infinite; }
+
+/* 6. TIER CARDS — two lines, not four. Plain difficulty word so the label
+   is legible cold; the taunt stays because that's the hook. */
+.tier-plain {
+  display: inline-block;
+  justify-self: start;
+  align-self: start;
+  width: fit-content;
+  font: 800 11.2px/1 "Manrope", sans-serif;
+  letter-spacing: 0.2em;
+  color: var(--ox, #7A2A34);
+  background: rgba(122, 42, 52, 0.09);
+  padding: 5px 9px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+/* 7. AXIOM INTRO */
+.axiom-screen { align-items: center; }
+.axiom-scene { min-height: clamp(260px, 42vh, 460px); }
+.axiom-scene.no-art {
+  background: radial-gradient(circle at 50% 38%, #2c4a7d 0%, #16294A 62%, #101f3a 100%);
+}
+.axiom-scene.no-art img { display: none; }
+.axiom-scene.no-art::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 46%;
+  width: 42%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 46% 46% 42% 42% / 52% 52% 40% 40%;
+  background: linear-gradient(160deg, #16294A, #0d1b33);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35), inset -14px -18px 40px rgba(0,0,0,0.4);
+}
+.axiom-copy h2 { margin: 6px 0 14px; }
+.axiom-line { font-size: 1.14rem; line-height: 1.5; margin: 0 0 12px; color: var(--ink, #2b3a52); }
+.axiom-line.dim { color: var(--muted); }
+.axiom-line.strong {
+  font-weight: 700; color: var(--navy, #16294A);
+  font-size: 1.25rem; margin-bottom: 20px;
+}
+
+@media (max-width: 820px) {
+  .axiom-screen { display: flex; flex-direction: column; align-items: stretch; gap: 16px; }
+  .axiom-scene { min-height: 0; width: 100%; aspect-ratio: 1; max-height: 40vh; }
+  .axiom-line { font-size: 1.08rem; margin-bottom: 9px; }
+  .axiom-line.strong { font-size: 1.19rem; }
+  .axiom-copy .primary-button { width: 100%; max-width: 340px; }
+  /* question screen: the question is now the second thing the eye meets */
+  .game-screen .action-label { font-size: 1.14rem; margin-bottom: 8px; }
+  .game-screen .timer b { font-size: 1.34rem; }
+}
+
+/* ============================================================
+   REVIEW PASS 2 (2026-08-18) — Kish, on the local build
+   ============================================================ */
+
+/* "H.E.I." under the score — it's the unit on the thing people screenshot,
+   so it shouldn't be the smallest text on the card. */
+.hei-badge-num i { font-size: 16.8px; letter-spacing: 0.26em; opacity: 0.72; margin-top: 7px; }
+
+/* Snap recap chips ("× All Lights Green", "✓ The Coffee Price War") — these
+   are the run summary and were smaller than body copy. */
+.snap-recap span { font-size: 1.01rem; padding: 7px 13px; line-height: 1.3; }
+
+/* "First one is a practice call. No clock on it." — the single most reassuring
+   line on the brief, previously set at caption size. */
+.brief-footer > div small { font-size: 1.03rem; line-height: 1.4; }
+.brief-footer > div { align-items: center; }
+
+@media (max-width: 820px) {
+  .hei-badge-num i { font-size: 15.68px; }
+  .snap-recap span { font-size: 0.99rem; }
+  .brief-footer > div small { font-size: 1.01rem; }
+
+  /* WELCOME: was ~1.9 screens tall, so the scene collage and the stats sat
+     below the fold and you had to scroll to find out what else was there.
+     Same treatment as the question screen — lock to one viewport and let the
+     collage absorb whatever height is left after the copy and the CTA. */
+  .welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: calc(100dvh - 92px);
+    min-height: 0;
+    overflow: hidden;
+    padding: 10px 16px 14px;
+    gap: 10px;
+  }
+  .welcome-scenes {
+    order: -1;                 /* art first, then the ask */
+    flex: 1 1 auto;
+    min-height: 96px;
+    max-height: 30vh;
+  }
+  .welcome-copy { flex: 0 0 auto; max-width: none; }
+  .welcome-copy h1 { font-size: clamp(2.35rem, 12vw, 3.36rem); line-height: 0.98; margin: 0 0 6px; }
+  .welcome-copy > p { font-size: 1.06rem; line-height: 1.4; margin: 0 0 10px; }
+  .welcome-copy .primary-button { margin-top: 10px; width: 100%; max-width: 340px; }
+  .welcome-facts { margin-top: 10px; gap: 12px; font-size: 0.85rem; }
+  .welcome-facts span { padding-right: 12px; }
+  .welcome-facts b { font-size: 15.68px; }
+  .pilot-gate { margin: 0; }
+}
+
+/* ============================================================
+   REVIEW PASS 3 — no hidden scrolling, and an honest hint when
+   scrolling is genuinely unavoidable.
+   ============================================================ */
+
+/* Scroll hint: only rendered when a screen actually overflows. A chevron that
+   bounces three times then settles, so it reads as "there's more" without
+   nagging. Hides itself the moment the user scrolls. */
+.scroll-hint {
+  position: fixed;
+  left: 50%;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 7px 14px 5px;
+  border-radius: 999px;
+  background: rgba(22, 41, 74, 0.9);
+  color: #fff;
+  font: 800 10.08px/1 "Manrope", sans-serif;
+  letter-spacing: 0.18em;
+  pointer-events: none;
+  animation: hintIn 0.4s ease both;
+  box-shadow: 0 8px 22px rgba(22, 41, 74, 0.3);
+}
+.scroll-hint b { font-size: 14.56px; animation: hintBounce 1.5s ease-in-out 3; }
+.scroll-hint.is-gone { animation: hintOut 0.3s ease forwards; }
+
+@keyframes hintIn   { from { opacity: 0; transform: translate(-50%, 12px); } }
+@keyframes hintOut  { to   { opacity: 0; transform: translate(-50%, 10px); } }
+@keyframes hintBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint b { animation: none; }
+}
+
+@media (max-width: 820px) {
+  /* BRIEF: was 1207px tall on an 852px screen — the BEGIN button sat 319px
+     below the fold. Four stacked cards become a 2x2 grid, which halves the
+     height and puts the whole audit on one screen. */
+  .brief-screen {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - 92px);
+    min-height: 0;
+    overflow: hidden;
+    padding: 12px 16px 14px;
+    gap: 10px;
+  }
+  .brief-heading { flex: 0 0 auto; }
+  .brief-heading h2 { font-size: clamp(1.68rem, 7vw, 2.24rem); line-height: 1.05; margin: 2px 0 0; }
+  .section-map {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 8px;
+  }
+  .section-map article { padding: 10px 11px; border-radius: 16px; }
+  .section-map article > span { font-size: 1.29rem; }
+  .section-map h3 { font-size: 0.92rem; line-height: 1.15; margin: 2px 0 3px; }
+  .section-map p { font-size: 0.81rem; line-height: 1.28; }
+  .brief-footer {
+    flex: 0 0 auto;
+    margin-top: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .brief-footer .primary-button { width: 100%; }
+  .brief-footer > div small { font-size: 0.92rem; }
+}
+
+/* AXIOM intro — ring centred on the amber eye band, not the default position. */
+.character-scene[data-scene="axiom-intro"] .character-focus { --focus-x: 48%; --focus-y: 33%; --focus-size: 150px; }
+.character-scene[data-scene="axiom-intro"] .character-motion { --motion-x: 48%; --motion-y: 20%; }
+
+/* Recap chips centred and given real weight — they're the run scoreboard,
+   not a footnote. Correct/incorrect now read at a glance from colour + fill. */
+.snap-recap { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0; }
+.snap-recap span {
+  font: 700 1.01rem/1.3 "DM Sans", sans-serif;
+  padding: 9px 15px; border-radius: 999px; border: 1.5px solid transparent;
+}
+.snap-recap span.right {
+  background: rgba(74, 124, 89, 0.14); border-color: rgba(74, 124, 89, 0.5); color: #2f5c3c;
+}
+.snap-recap span.wrong {
+  background: rgba(200, 74, 60, 0.12); border-color: rgba(200, 74, 60, 0.45); color: #9c3325;
+}
+
+/* Section art — fills the empty top of each brief tile, and replaces the
+   generic glyph card on the section intro. */
+.section-map article { position: relative; overflow: hidden; }
+.section-art {
+  display: block; width: 100%; aspect-ratio: 1;
+  border-radius: 12px; overflow: hidden; margin: 6px 0 8px;
+  background: rgba(23, 54, 95, 0.05);
+}
+.section-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.section-scene { min-height: clamp(240px, 40vh, 460px); }
+
+@media (max-width: 820px) {
+  /* Brief tiles now carry art, so the copy tightens to keep all four on one screen. */
+  .section-map article { padding: 8px 9px 9px; }
+  .section-art { margin: 4px 0 6px; border-radius: 10px; }
+  .section-map h3 { font-size: 0.85rem; margin: 0 0 2px; }
+  .section-map p { font-size: 0.73rem; line-height: 1.22; }
+  .section-map article > span { font-size: 1.06rem; }
+  .section-scene { min-height: 0; width: 100%; aspect-ratio: 1; max-height: 34vh; }
+  .section-intro-screen {
+    display: flex; flex-direction: column; height: calc(100dvh - 92px);
+    min-height: 0; overflow: hidden; padding: 12px 16px 14px; gap: 10px;
+  }
+  .section-intro-visual { order: -1; flex: 0 0 auto; }
+  .section-intro-copy { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .section-intro-copy h2 { font-size: clamp(1.68rem, 7.5vw, 2.35rem); margin: 2px 0 6px; }
+  .section-intro-copy > p { font-size: 1.03rem; line-height: 1.35; margin: 0 0 10px; }
+  .section-rules { gap: 8px; font-size: 0.81rem; margin-bottom: 10px; }
+  .section-intro-copy .primary-button { width: 100%; margin-top: auto; }
+}
+
+@media (max-width: 820px) {
+  /* Feedback overflowed 45-67px once the recap chips were enlarged — the
+     end-of-section screen carries four of them. Hero gives way, not the copy. */
+  .feedback-screen {
+    display: flex; flex-direction: column; height: calc(100dvh - 92px);
+    min-height: 0; overflow: hidden; padding: 12px 16px 14px; gap: 10px;
+  }
+  .feedback-visual { flex: 1 1 auto; min-height: 0; display: flex; }
+  .feedback-visual .character-scene {
+    flex: 1 1 auto; width: 100%; height: auto; min-height: 120px; max-height: 34vh;
+  }
+  .feedback-panel { flex: 0 0 auto; display: flex; flex-direction: column; }
+  .feedback-score h2 { font-size: 1.68rem; line-height: 1.05; }
+  .feedback-panel > p { font-size: 1.01rem; line-height: 1.35; margin: 6px 0 0; }
+  .snap-recap { margin: 10px 0 0; gap: 6px; }
+  .snap-recap span { font-size: 0.92rem; padding: 7px 12px; }
+  .feedback-panel .primary-button { width: 100%; margin-top: 10px; }
+}
+
+/* ------------------------------------------------------------------
+   COLUMN-FLEX CROSS-AXIS GUARD
+
+   The <=900px block sets `align-items: start` on these screens, which was
+   written when they were CSS GRID — there it means vertical and is harmless.
+   Every screen converted to `flex-direction: column` inherits it as a
+   HORIZONTAL rule instead, collapsing children to content width. Anything
+   whose content is absolutely positioned (our .character-scene, whose <img>
+   is inset:0) then has no width at all and renders 2px wide — border only.
+
+   This bit the question hero first, then the section-intro art. Declared once
+   here for every column-flex screen so it cannot happen a third time.
+------------------------------------------------------------------- */
+@media (max-width: 820px) {
+  .welcome-screen,
+  .axiom-screen,
+  .brief-screen,
+  .section-intro-screen,
+  .game-screen,
+  .feedback-screen,
+  .tier-screen { align-items: stretch; }
+
+  .section-intro-visual { width: 100%; }
+  .section-intro-visual .section-scene { width: 100%; }
+  .feedback-visual { width: 100%; }
+}
+
+/* ============================================================
+   REVIEW PASS 4 (2026-08-19) — Atlas team voice note
+   ============================================================ */
+
+/* Pips: all twelve identical. .section-progress was a 4-col grid, so a section
+   holding 2 pips gave each of them twice the width of a section holding 4.
+   Flex-weighted by question count instead. */
+.section-progress { display: flex; grid-template-columns: none; gap: 10px; }
+.progress-group { flex: 1; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+
+/* Tier cards carry a subtle difficulty tint instead of reading as three
+   identical white boxes. Kept faint — the taunt is still the hero. */
+.tier-card { transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+.tier-training  { background: linear-gradient(170deg, rgba(74,124,89,.10), rgba(74,124,89,.03)); border-color: rgba(74,124,89,.34); }
+.tier-baseline  { background: linear-gradient(170deg, rgba(217,142,43,.12), rgba(217,142,43,.03)); border-color: rgba(217,142,43,.38); }
+.tier-impossible{ background: linear-gradient(170deg, rgba(200,74,60,.11), rgba(200,74,60,.03)); border-color: rgba(200,74,60,.36); }
+.tier-training:hover  { background: rgba(74,124,89,.16);  border-color: rgba(74,124,89,.6); }
+.tier-baseline:hover  { background: rgba(217,142,43,.18); border-color: rgba(217,142,43,.65); }
+.tier-impossible:hover{ background: rgba(200,74,60,.17);  border-color: rgba(200,74,60,.6); }
+/* the plain EASY/MEDIUM/HARD pill inherits the same colour language */
+.tier-training  .tier-plain { color:#2f5c3c; background: rgba(74,124,89,.16); }
+.tier-baseline  .tier-plain { color:#8a5a12; background: rgba(217,142,43,.18); }
+.tier-impossible .tier-plain{ color:#9c3325; background: rgba(200,74,60,.16); }
+
+/* Small caps labels were too small to read comfortably — +10% across the board. */
+.micro-label      { font-size: 0.8rem; }
+.scene-meta       { font-size: 0.8rem; }
+.round-meta span  { font-size: 0.74rem; }
+.section-map h3   { font-size: 1.01rem; }
+.tier-plain       { font-size: 12.32px; }
+.result-callouts span,
+.trait-results span,
+.section-results span { font-size: 0.87rem; }
+.hei-badge-band   { font-size: 16.02px; }
+@media (max-width: 820px) {
+  .game-screen .decision-panel .micro-label { font-size: 0.74rem; }
+  .game-screen .round-meta span { font-size: 0.74rem; }
+  .game-screen .scene-meta { font-size: 0.76rem; }
+}
+
+/* Section art: the AXIOM figure sits centre-top in every frame, so anchor the
+   crop there instead of dead centre — the SNAP card was cutting his head off. */
+.section-art img { object-position: 50% 22%; }
+.section-scene img { object-position: 50% 26%; }
+
+/* ============================================================
+   DESKTOP (>820px) — this layout had drifted while the mobile
+   one was rebuilt. Three fixes from Kish's desktop screenshots.
+   ============================================================ */
+@media (min-width: 821px) {
+
+  /* 1. ANSWERS BELONG WITH THE QUESTION.
+     .thumb-bar is the 3rd child of a 2-col grid, so it auto-placed into row 2
+     column 1 and stretched full width along the bottom — miles from the text
+     it answers. Pin the visual down the left, and stack panel + answers in the
+     right column so the eye goes picture -> question -> answer in one column. */
+  .game-screen .question-visual { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+  .game-screen .decision-panel  { grid-column: 2; grid-row: 1; align-self: end; }
+  .game-screen .thumb-bar       { grid-column: 2; grid-row: 2; align-self: start; margin-top: 18px; }
+  .game-screen .binary-actions  { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .game-screen .tile-grid       { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* the clock sits with the answers rather than floating mid-column */
+  .game-screen .timer { justify-content: flex-start; }
+
+  /* 2. AXIOM INTRO WAS A SQUARE IMAGE IN A LETTERBOX.
+     The scene ran full page width at a fixed min-height, so object-fit: cover
+     threw away most of a 1:1 render. Box it properly and sit the copy beside it. */
+  .axiom-screen {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(380px, 1.1fr);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+    max-width: 1540px;
+    margin: 0 auto;
+  }
+  .axiom-visual { display: flex; justify-content: center; }
+  .axiom-scene {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1;
+    min-height: 0;
+    height: auto;
+  }
+  .axiom-copy { max-width: 620px; }
+
+  /* 3. SECTION INTRO ART — same square-into-wide-box problem, milder. */
+  .section-intro-visual { display: flex; justify-content: center; }
+  .section-scene { width: 100%; max-width: 520px; aspect-ratio: 1; min-height: 0; height: auto; }
+}
+
+/* Alternate particle offset — replaces the invalid calc() modulo above. */
+.character-motion i:nth-child(2n) { top: calc(var(--motion-y) + 3%); }
+
+/* ============================================================
+   WEBKIT PASS — found on a real WebKit build at a 660px iPhone
+   viewport (iPhone 14 Pro with Safari chrome visible), which is
+   shorter than anything the Chromium tests were hitting.
+   ============================================================ */
+@media (max-width: 820px) {
+  /* The AXIOM intro was the one screen never locked to a single viewport —
+     it overflowed 94px on a short iPhone and tripped the scroll hint. Same
+     treatment as the rest: fixed height, image absorbs what's left. */
+  .axiom-screen {
+    height: calc(100vh - 92px);
+    height: calc(100dvh - 92px);
+    min-height: 0;
+    overflow: hidden;
+    padding: 10px 16px 14px;
+    gap: 8px;
+  }
+  .axiom-visual { flex: 1 1 auto; min-height: 0; display: flex; }
+  .axiom-scene {
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+    min-height: 120px;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+  .axiom-copy { flex: 0 0 auto; display: flex; flex-direction: column; }
+  .axiom-copy h2 { margin: 4px 0 8px; font-size: clamp(1.68rem, 7vw, 2.24rem); }
+  .axiom-line { font-size: 1.03rem; line-height: 1.4; margin-bottom: 7px; }
+  .axiom-line.strong { font-size: 1.12rem; margin-bottom: 12px; }
+  .axiom-copy .primary-button { margin-top: auto; }
+
+  /* Tier screen was 18px over on the same viewport — under the hint threshold
+     but still a scroll. Tighten the card padding rather than the copy. */
+  .tier-screen { padding-bottom: 10px; }
+  .tier-card { padding: 12px 14px; }
+  .tier-card em { font-size: 0.96rem; line-height: 1.3; }
+  .tier-head h2 { margin-bottom: 4px; }
+  .tier-sub { font-size: 0.99rem; margin-bottom: 6px; }
+}
+
+/* ============================================================
+   REVEAL SCREEN — contact capture at peak intent, between the
+   last question and the result. The score is already banked.
+   ============================================================ */
+.reveal-screen { display: grid; place-items: center; }
+.reveal-copy { max-width: 620px; width: 100%; }
+.reveal-copy h2 { margin: 6px 0 14px; }
+.reveal-hook { font-size: 1.19rem; line-height: 1.5; color: var(--ink, #2b3a52); margin: 0 0 10px; }
+.reveal-hook b { color: var(--navy, #16294A); }
+.reveal-sub { font-size: 1.06rem; line-height: 1.5; color: var(--muted); margin: 0 0 20px; }
+.reveal-form { margin-top: 4px; }
+.pilot-fields-solo { grid-template-columns: 1fr; max-width: 420px; }
+
+@media (max-width: 820px) {
+  .reveal-screen {
+    display: flex; flex-direction: column; align-items: stretch; justify-content: center;
+    height: calc(100vh - 92px);
+    height: calc(100dvh - 92px);
+    min-height: 0; overflow: hidden; padding: 14px 16px;
+  }
+  .reveal-copy h2 { font-size: clamp(1.62rem, 7vw, 2.24rem); line-height: 1.1; margin: 4px 0 10px; }
+  .reveal-hook { font-size: 1.1rem; margin-bottom: 8px; }
+  .reveal-sub { font-size: 0.99rem; margin-bottom: 14px; }
+  .reveal-form .primary-button { width: 100%; }
+  .pilot-fields-solo { max-width: none; }
+}
+
+/* Score chip locked on the reveal screen — the number is what they're unlocking. */
+.score-chip.is-locked { border-color: rgba(122, 42, 52, 0.35); background: rgba(122, 42, 52, 0.06); }
+.score-chip.is-locked strong { font-size: 19.04px; line-height: 1.35; }
+
+/* Percentile line — only rendered when the sample is big enough to be honest. */
+.hei-percentile { display: none; margin-top: 8px; font: 600 14.56px/1.4 "DM Sans", sans-serif; color: var(--muted); }
+.hei-percentile.is-on { display: block; }
+
+/* Debrief — reframes the timer as the mechanic instead of an annoyance. */
+.debrief {
+  margin: 4px 0 18px; padding: 14px 16px; border-radius: 16px;
+  background: rgba(23, 54, 95, 0.05); border-left: 3px solid var(--amber, #D98E2B);
+  max-width: 460px;
+}
+.debrief-label { display: block; font: 800 11.2px/1 "Manrope", sans-serif; letter-spacing: .2em; color: var(--ox, #7A2A34); margin-bottom: 7px; }
+.debrief p { margin: 0; font-size: 1.03rem; line-height: 1.45; color: var(--ink, #2b3a52); }
+@media (max-width: 820px) {
+  .debrief { margin: 2px 0 14px; padding: 12px 14px; max-width: none; }
+  .debrief p { font-size: 0.97rem; }
+}
+
+/* Share + Save side by side. Not everyone uses a share sheet, and desktop
+   browsers often have none at all — saving the image must always be possible. */
+.result-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+.result-actions .share-button { flex: 1 1 220px; max-width: 340px; }
+.result-actions .save-button { flex: 0 1 190px; margin-top: 0; }
+@media (max-width: 520px) {
+  .result-actions { flex-direction: column; }
+  .result-actions .share-button,
+  .result-actions .save-button { max-width: none; flex: 1 1 auto; width: 100%; }
+}
+
+/* ============================================================
+   STAGED QUESTION REVEAL (2026-08-21)
+   Scene alone -> situation -> the question -> AXIOM's choice ->
+   answers. One thing at a time instead of the whole wall at once.
+   Tap anywhere to skip. The clock starts only at the end.
+   ============================================================ */
+
+/* the veil dims everything except the scene */
+.stage-veil {
+  position: fixed; inset: 0; z-index: 40;
+  background: rgba(28, 22, 16, 0.72);
+  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  display: grid; place-items: center;
+  animation: veilIn .28s ease both;
+}
+.game-screen.veil-out .stage-veil { animation: veilOut .42s ease both; pointer-events: none; }
+@keyframes veilIn  { from { opacity: 0 } }
+@keyframes veilOut { to { opacity: 0 } }
+
+/* the scene punches through the veil */
+.game-screen.staged .question-visual { position: relative; z-index: 45; }
+.game-screen.staged:not(.veil-out):not(.stage-done) .character-scene {
+  box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 0 3px rgba(217,142,43,.5);
+  transform: scale(1.02);
+}
+.game-screen.staged .character-scene { transition: transform .45s cubic-bezier(.2,.7,.3,1), box-shadow .45s ease; }
+
+
+
+/* each step waits its turn */
+.game-screen.staged .reveal-step { opacity: 0; transform: translateY(10px); transition: opacity .34s ease, transform .34s cubic-bezier(.2,.7,.3,1); }
+.game-screen.staged[data-stage="1"] .step-situation,
+.game-screen.staged[data-stage="2"] .step-situation,
+.game-screen.staged[data-stage="2"] .step-question,
+.game-screen.staged[data-stage="3"] .step-situation,
+.game-screen.staged[data-stage="3"] .step-question,
+.game-screen.staged[data-stage="3"] .step-axiom,
+.game-screen.staged[data-stage="4"] .reveal-step,
+.game-screen.stage-done .reveal-step { opacity: 1; transform: none; }
+
+/* THE QUESTION — the thing that was missing. Binary rounds never stated the ask. */
+.question-bar {
+  margin: 10px 0 12px; padding: 13px 16px;
+  border-radius: 16px; background: rgba(23, 54, 95, 0.07);
+  border-left: 3px solid var(--navy, #16294A);
+}
+.question-bar-label {
+  display: block; font: 800 11.2px/1 "Manrope", sans-serif;
+  letter-spacing: .2em; color: var(--ox, #7A2A34); margin-bottom: 6px;
+}
+.question-bar strong {
+  display: block; font: 800 1.32rem/1.28 "Manrope", sans-serif;
+  color: var(--navy, #16294A); letter-spacing: -0.01em;
+}
+
+/* PRACTICE CALL — was a quiet grey chip, now unmissable */
+.scene-meta b {
+  background: var(--amber, #D98E2B); color: #16294A;
+  padding: 5px 11px; border-radius: 999px;
+  font-weight: 800; letter-spacing: .16em;
+  box-shadow: 0 4px 14px rgba(217,142,43,.35);
+}
+
+@media (max-width: 820px) {
+  .question-bar { margin: 8px 0 10px; padding: 11px 13px; }
+  .question-bar strong { font-size: 1.19rem; }
+  .stage-ring { bottom: 16%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-veil { display: none; }
+  .game-screen.staged .reveal-step { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- TRAIT RADAR (spider chart) ---------- */
+.trait-radar-wrap { margin: 18px 0 8px; text-align: center; }
+.trait-radar { width: 100%; max-width: 420px; height: auto; display: block; margin: 6px auto 0; overflow: visible; }
+.radar-ring  { fill: none; stroke: rgba(23, 54, 95, 0.13); stroke-width: 1; }
+.radar-spoke { stroke: rgba(23, 54, 95, 0.10); stroke-width: 1; }
+.radar-shape {
+  fill: rgba(217, 142, 43, 0.26); stroke: var(--amber, #D98E2B); stroke-width: 2.5;
+  stroke-linejoin: round;
+  transform-origin: center; animation: radarGrow .8s cubic-bezier(.2,1.1,.4,1) both;
+}
+.radar-dot   { fill: var(--navy, #16294A); }
+.radar-label { font: 800 9.5px/1 "Manrope", sans-serif; letter-spacing: .1em; fill: rgba(23,54,95,.62); }
+.radar-value { font: 800 13px/1 "Manrope", sans-serif; fill: var(--navy, #16294A); }
+@keyframes radarGrow { from { transform: scale(.2); opacity: 0 } }
+@media (prefers-reduced-motion: reduce) { .radar-shape { animation: none; } }
+
+/* ============================================================
+   TYPE HIERARCHY PASS (2026-08-21)
+   The answers are the thing the player actually acts on, and the
+   situation + AXIOM's claim are what they judge. Those three were
+   set in the lighter body face at body size while decorative
+   chrome sat in the heavier one. Rank restored.
+   ============================================================ */
+
+/* 1. THE ANSWERS — biggest interactive text on the screen. */
+.decision-button strong { font: 800 24px/1.1 "Manrope", sans-serif; letter-spacing: -0.01em; }
+.decision-button small  { font: 500 14px/1.35 "DM Sans", sans-serif; opacity: .78; }
+.decision-button { min-height: 148px; padding: 20px; }
+
+.line-option {
+  min-height: 66px;
+  font: 600 1.06rem/1.35 "DM Sans", sans-serif;
+  color: var(--navy, #16294A);
+}
+.line-option span { font: 800 13px/1 "Manrope", sans-serif; opacity: .5; }
+
+.gap-tile {
+  min-height: 96px;
+  font: 600 1.04rem/1.3 "DM Sans", sans-serif;
+  color: var(--navy, #16294A);
+}
+
+/* 2. THE SITUATION — this is the case being judged, not caption text. */
+.question-copy {
+  font: 500 1.12rem/1.5 "DM Sans", sans-serif;
+  color: var(--ink, #2b3a52);
+}
+
+/* 3. AXIOM'S CLAIM — the thing under scrutiny. Was body-grey; now it carries
+   weight and a warmer ground so it reads as a quote, not a footnote. */
+.axiom-panel { background: rgba(23, 54, 95, 0.06); padding: 15px 18px; border-radius: 16px; }
+.axiom-panel span {
+  font: 800 11px/1 "Manrope", sans-serif; letter-spacing: .2em;
+  color: var(--ox, #7A2A34);
+}
+.axiom-panel p {
+  font: 600 1.1rem/1.45 "DM Sans", sans-serif;
+  color: var(--navy, #16294A);
+  margin-top: 8px;
+}
+
+/* 4. THE ASK — the loudest line in the panel. */
+.question-bar strong { font: 800 1.32rem/1.25 "Manrope", sans-serif; }
+
+@media (max-width: 820px) {
+  .decision-button { min-height: 120px; padding: 16px 14px; }
+  .decision-button strong { font-size: 20px; }
+  .decision-button small { display: none; }
+  .line-option { min-height: 60px; font-size: 1rem; }
+  .gap-tile { min-height: 88px; font-size: .98rem; }
+  .question-copy { font-size: 1.04rem; }
+  .axiom-panel p { font-size: 1.02rem; }
+  .question-bar strong { font-size: 1.18rem; }
+}
+
+/* ============================================================
+   SITUATION · AXIOM AVATAR · RAY REVEAL  (2026-08-21)
+   ============================================================ */
+
+/* 1. THE SITUATION — deliberately NOT another panel. The screen already has two
+   boxed blocks; a third would flatten the hierarchy back out. It gets size and
+   an amber rule instead, so it reads as the setup rather than a third choice. */
+.situation-copy {
+  margin: 8px 0 16px;
+  padding-left: 16px;
+  border-left: 3px solid var(--amber, #D98E2B);
+  font: 500 1.28rem/1.48 "DM Sans", sans-serif;
+  color: var(--navy, #16294A);
+}
+
+/* 2. AXIOM'S AVATAR — the same head as the favicon, so the voice is attributable. */
+.axiom-who { display: inline-flex; align-items: center; gap: 9px; }
+.axiom-avatar {
+  width: 26px; height: 26px; border-radius: 8px; display: block;
+  box-shadow: 0 2px 8px rgba(22, 41, 74, 0.28);
+}
+
+/* 3. RAY REVEAL — a band of light sweeps left to right and the words appear
+   behind it, so AXIOM's choice lands as a reveal rather than just fading in. */
+.axiom-line-reveal {
+  position: relative;
+  font: 600 1.1rem/1.45 "DM Sans", sans-serif;
+  color: var(--navy, #16294A);
+  margin-top: 10px;
+  clip-path: inset(0 100% 0 0);
+}
+/* Driven by ONE class, added once by JS. Keying this off data-stage meant the
+   rule set changed on every stage tick, which restarts a CSS animation — the
+   wipe kept starting over and the sentence sat permanently half-clipped. */
+.axiom-line-reveal.is-revealed { animation: rayWipe .72s cubic-bezier(.25,.6,.25,1) forwards; }
+.axiom-line-reveal.is-revealed::after {
+  content: ""; position: absolute; inset: -6px -2px;
+  background: linear-gradient(100deg, transparent 0%, rgba(217,142,43,0) 38%,
+              rgba(217,142,43,.85) 50%, rgba(255,238,205,.95) 54%, rgba(217,142,43,0) 66%, transparent 100%);
+  animation: raySweep .72s cubic-bezier(.25,.6,.25,1) forwards;
+  pointer-events: none; mix-blend-mode: screen;
+}
+/* once the wipe has run, drop the clip entirely so nothing can re-clip it */
+.axiom-line-reveal.is-shown { clip-path: none !important; animation: none !important; }
+.axiom-line-reveal.is-shown::after { display: none; }
+@keyframes rayWipe  { from { clip-path: inset(0 100% 0 0) } to { clip-path: inset(0 -2% 0 0) } }
+@keyframes raySweep { from { transform: translateX(-105%) } to { transform: translateX(105%); opacity: 0 } }
+
+/* the panel glows briefly as the ray passes */
+.axiom-panel.is-flash { animation: axiomFlash .8s ease forwards; }
+@keyframes axiomFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(217,142,43,0) }
+  40%  { box-shadow: 0 0 0 3px rgba(217,142,43,.35) }
+  100% { box-shadow: 0 0 0 0 rgba(217,142,43,0) }
+}
+
+/* 4. ANSWER SUB-TEXT — these explain what each choice MEANS, and were hidden on
+   mobile entirely. They're part of the decision, so they stay and get bigger. */
+.decision-button small {
+  display: block !important;
+  font: 500 15px/1.4 "DM Sans", sans-serif;
+  color: var(--muted); opacity: .95; margin-top: 6px;
+}
+
+@media (max-width: 820px) {
+  .situation-copy { font-size: 1.12rem; padding-left: 13px; margin: 6px 0 12px; }
+  .axiom-avatar { width: 22px; height: 22px; }
+  .decision-button { min-height: 132px; }
+  .decision-button small { display: block !important; font-size: 13.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .axiom-line-reveal { clip-path: none; animation: none !important; }
+  .axiom-line-reveal::after { display: none; }
+  .axiom-panel { animation: none !important; }
+}
+
+
+/* ---------- VEIL COUNTDOWN — centred, unwinds, shrinks inward ---------- */
+.stage-counter {
+  width: 132px; height: 132px; position: relative;
+  animation: counterShrink var(--veil-ms, 2500ms) cubic-bezier(.55,0,.35,1) forwards;
+}
+.stage-counter svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-track    { fill: none; stroke: rgba(237,225,207,.22); stroke-width: 3; }
+.ring-progress {
+  fill: none; stroke: var(--amber, #D98E2B); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 276.5; stroke-dashoffset: 0;
+  animation: ringUnwind var(--veil-ms, 2500ms) linear forwards;
+  filter: drop-shadow(0 0 6px rgba(217,142,43,.6));
+}
+@keyframes ringUnwind   { to { stroke-dashoffset: 276.5 } }
+@keyframes counterShrink {
+  0%   { transform: scale(1);   opacity: 1 }
+  82%  { transform: scale(.42); opacity: .9 }
+  100% { transform: scale(.05); opacity: 0 }
+}
+.stage-skip {
+  position: absolute; bottom: 9%; color: rgba(237,225,207,.62);
+  font: 700 11px/1 "Manrope", sans-serif; letter-spacing: .2em; text-transform: uppercase;
+}
+
+/* the scroll hint must never appear over the veil */
+.game-screen.staged:not(.stage-done) ~ .scroll-hint,
+body:has(.stage-veil) .scroll-hint { display: none !important; }
+
+/* ---------- DESKTOP FIT ----------
+   1366x768 is the most common Windows laptop size and the answers were landing
+   61px below the fold, so every question needed a scroll. The hero now yields
+   height instead of the interactive part being pushed off. */
+@media (min-width: 821px) {
+  .game-screen { min-height: calc(100vh - 92px); align-content: center; }
+  .game-screen .character-scene {
+    max-height: calc(100vh - 300px);
+    min-height: 0;
+    aspect-ratio: 1;
+    width: auto;
+    margin-inline: auto;
+  }
+}
+@media (min-width: 821px) and (max-height: 850px) {
+  .screen { padding-top: 18px; padding-bottom: 22px; }
+  .game-screen .character-scene { max-height: calc(100vh - 250px); }
+  .game-screen .decision-panel h2 { font-size: 1.9rem; }
+  .situation-copy { font-size: 1.12rem; margin: 6px 0 10px; }
+  .axiom-panel { padding: 11px 14px; }
+  .axiom-panel p { font-size: 1rem; margin-top: 6px; }
+  .question-bar { margin: 8px 0 10px; padding: 10px 14px; }
+  .question-bar strong { font-size: 1.16rem; }
+  .game-screen .thumb-bar { margin-top: 12px; }
+  .decision-button { min-height: 112px; padding: 14px; }
+  .decision-button strong { font-size: 20px; }
+}
+
+/* AXIOM's head on the answer that endorses him — makes it obvious whose call
+   you are agreeing with. Sits quietly in the corner, never competes with the label. */
+.decision-button { position: relative; overflow: hidden; }
+.answer-mark {
+  position: absolute; right: -10px; bottom: -12px;
+  width: 62px; height: 62px; opacity: .16;
+  pointer-events: none; filter: grayscale(.2);
+}
+.decision-button:hover .answer-mark { opacity: .26; }
+@media (max-width: 820px) { .answer-mark { width: 50px; height: 50px; right: -8px; bottom: -10px; } }
+
+/* ============================================================
+   THE QUESTION, HIGHLIGHTED (2026-09-01)
+   Manik: "can the question be highlighted". It was the same
+   navy-tinted panel as AXIOM's claim directly above it, so the two
+   read as a pair rather than as claim-then-ask. Now it carries the
+   coral accent and real glass — same translucency language as the
+   answer cards below, so the eye runs question -> answers.
+   ============================================================ */
+.question-bar {
+  position: relative;
+  margin: 12px 0 14px;
+  padding: 15px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(232, 102, 87, 0.34);
+  border-left: 4px solid var(--coral, #e86657);
+  /* glass, matching .decision-button's rgba(255,255,255,.48) ground */
+  background: linear-gradient(135deg, rgba(232, 102, 87, 0.16), rgba(255, 255, 255, 0.46));
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  box-shadow: 0 10px 26px rgba(232, 102, 87, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.question-bar-label { color: var(--coral, #e86657); }
+.question-bar strong { color: var(--navy, #17365f); }
+
+/* it lands last in the reveal, so a one-shot pulse marks the hand-off to the answers */
+.game-screen.staged[data-stage="4"] .question-bar,
+.game-screen.stage-done .question-bar { animation: askPulse .9s ease both; }
+@keyframes askPulse {
+  0%   { box-shadow: 0 10px 26px rgba(232,102,87,.13), inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 0 rgba(232,102,87,.34); }
+  45%  { box-shadow: 0 10px 26px rgba(232,102,87,.18), inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 5px rgba(232,102,87,.16); }
+  100% { box-shadow: 0 10px 26px rgba(232,102,87,.13), inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 0 rgba(232,102,87,0); }
+}
+@media (prefers-reduced-motion: reduce) { .question-bar { animation: none !important; } }
+
+/* ------------------------------------------------------------------
+   Short desktop viewports, continued.
+
+   Two things this has to sit after, not before:
+   (1) the block above re-set .question-bar padding at full size, which
+       silently undid the max-height:850px compaction — same specificity,
+       later rule wins. Restated here so 1366x768 keeps its tighter ask.
+   (2) the brief screen never had a short-viewport pass, so on the most
+       common Windows laptop size (1366x768) the BEGIN button finished
+       31px below the fold. Kish has flagged that scroll twice; the
+       primary CTA has to be on screen without moving anything.
+   ------------------------------------------------------------------ */
+@media (min-width: 821px) and (max-height: 850px) {
+  .question-bar { margin: 8px 0 10px; padding: 10px 14px; }
+  .question-bar strong { font-size: 1.16rem; }
+
+  .brief-heading { margin-bottom: 20px; column-gap: 44px; }
+  .brief-heading h2 { font-size: clamp(36px, 3.2vw, 50px); }
+  .brief-heading p { font-size: 17.6px; line-height: 1.45; }
+  .brief-heading .micro-label { margin-bottom: 7px; }
+  .section-map article { min-height: 0; }
+  .brief-footer { margin-top: 16px; }
+}
+
+/* The countdown sits on the ARTWORK's centre, not the viewport's — on desktop
+   the plate is in the left column, so viewport-centring buried the ring behind
+   its right edge. JS measures the scene into --veil-cx/cy (see
+   anchorVeilToScene); the grid fallback keeps it centred if that never runs. */
+.stage-veil:not([style*="--veil-cx"]) { display: grid; place-items: center; }
+.stage-veil[style*="--veil-cx"] { display: block; }
+.stage-veil[style*="--veil-cx"] .stage-counter {
+  position: absolute;
+  left: var(--veil-cx); top: var(--veil-cy);
+  margin: -66px 0 0 -66px;   /* half of 132px — translate would fight counterShrink */
+}
+.stage-veil[style*="--veil-cx"] .stage-skip {
+  position: absolute; bottom: var(--veil-bottom, 9%);
+  left: var(--veil-cx); transform: translateX(-50%);
+}
+
+/* ============================================================
+   PHONE: GIVE THE PLATE ITS MOMENT (2026-09-01)
+
+   The staged reveal is meant to show the scene on its own before the
+   panel builds. On desktop it does — the art column is ~600px tall.
+   On phone the scene is a flex child taking whatever the column has
+   left over, which is 150px, so the "full screen" beat filled 17% of
+   the screen and object-fit:cover threw away 60% of a square plate.
+   Kish circled exactly this band.
+
+   Fix: while the veil is up the scene stops being a leftover-space
+   child (flex: 0 0 auto) and takes a real height. The panel below is
+   pushed out under the veil and slides back as the reveal runs, so the
+   screen is clipped, never scrollable. Height is transitioned, and the
+   countdown ring re-measures every frame (anchorVeilToScene), so it
+   follows the growth instead of lagging behind it.
+
+   flex: 0 0 auto is load-bearing — with flex: 1 1 auto and min-height: 0
+   the box collapses to 2px, because the <img> inside is absolutely
+   positioned and contributes no content height.
+   ============================================================ */
+@media (max-width: 820px) {
+  .game-screen.staged .character-scene {
+    transition: transform .45s cubic-bezier(.2,.7,.3,1),
+                box-shadow .45s ease,
+                height .55s cubic-bezier(.2,.7,.3,1);
+  }
+  .game-screen.staged:not(.veil-out):not(.stage-done) { overflow: hidden; }
+  .game-screen.staged:not(.veil-out):not(.stage-done) .question-visual { flex: 0 0 auto; }
+  .game-screen.staged:not(.veil-out):not(.stage-done) .character-scene {
+    flex: 0 0 auto;
+    /* the base mobile rule caps the scene at 52vh so the panel always fits.
+       During the veil the panel is clipped anyway, so the cap comes off and
+       the plate is free to take the screen. */
+    max-height: none;
+    /* square source: a square box shows the whole composition. capped so
+       the ring and the skip hint keep air on a short phone. */
+    height: min(88vw, 52vh);
+  }
+}
+
+/* A <picture> wraps the <img> wherever a portrait plate exists. display:contents
+   keeps it out of the box tree entirely, so the img still positions against
+   .character-scene rather than against an extra wrapper at auto height. */
+.character-scene picture { display: contents; }
+
+/* With a 2:3 portrait plate the hero beat no longer has to settle for a square
+   box — it can take the shape of the art and genuinely fill the phone. Scenes
+   still on a square plate keep the square box above, so the two can coexist
+   while the portrait set lands in batches. */
+@media (max-width: 820px) {
+  .game-screen.staged:not(.veil-out):not(.stage-done) .character-scene[data-plate="tall"] {
+    height: min(140vw, 62vh);
+  }
+}
+
+/* ============================================================
+   PHONE, FULL-BLEED PLATE (2026-09-01)
+
+   The settled question screen gave the art 150px of a 664px phone —
+   23% — because the situation, AXIOM's claim, the question and two
+   answer cards need ~515px between them. Showing the whole plate
+   stacked above all that would take ~1050px of screen. It doesn't fit,
+   and it never could.
+
+   So on phones the plate stops being a row in the column and becomes
+   the screen: full-bleed behind everything. The panel and the answers
+   ride on one frosted sheet over its lower half — the same glass
+   language as the answer cards and the question bar.
+
+   Only where a portrait plate exists (.bleed is set per question from
+   TALL_SCENES). A 1:1 plate stretched to a phone screen would crop
+   harder than the band it replaced, so those keep the stacked layout
+   until their portrait version lands.
+   ============================================================ */
+
+/* Desktop and square-plate phones never see the sheet as a box — the grid
+   keeps addressing .decision-panel and .thumb-bar directly. */
+.panel-sheet { display: contents; }
+
+@media (max-width: 820px) {
+  .game-screen.bleed { position: relative; overflow: hidden; padding: 0; }
+
+  .game-screen.bleed .question-visual {
+    position: absolute; inset: 0; z-index: 0; margin: 0; padding: 0;
+  }
+  .game-screen.bleed .character-scene {
+    width: 100%; height: 100%;
+    min-height: 0; max-height: none;
+    border: 0; border-radius: 0; box-shadow: none;
+  }
+  /* the plate is portrait and the screen is more portrait still, so cover
+     crops the sides a little rather than the story at top and bottom */
+  .game-screen.bleed .character-scene img { object-fit: cover; object-position: 50% 42%; }
+
+  /* section label sits on the art, so it needs its own contrast */
+  .game-screen.bleed .scene-meta {
+    position: absolute; top: 10px; left: 16px; right: 16px; z-index: 12;
+    text-shadow: 0 1px 10px rgba(23, 54, 95, 0.45);
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .game-screen.bleed .scene-meta b {
+    background: rgba(255, 255, 255, 0.82); color: var(--navy, #17365f);
+    text-shadow: none; backdrop-filter: blur(8px);
+  }
+
+  .game-screen.bleed .panel-sheet {
+    display: flex; flex-direction: column;
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 10;
+    padding: 14px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-radius: 26px 26px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(250, 246, 240, 0.78);
+    backdrop-filter: blur(24px) saturate(1.25);
+    -webkit-backdrop-filter: blur(24px) saturate(1.25);
+    box-shadow: 0 -20px 48px rgba(23, 54, 95, 0.22);
+    transition: transform .5s cubic-bezier(.2, .7, .3, 1);
+  }
+  /* the plate owns the screen outright while the veil is up; the sheet
+     then slides up under it */
+  .game-screen.bleed.staged:not(.veil-out):not(.stage-done) .panel-sheet {
+    transform: translateY(101%);
+  }
+  /* ...and the sizing rules for the stacked hero don't apply any more */
+  .game-screen.bleed.staged:not(.veil-out):not(.stage-done) .character-scene {
+    height: 100%;
+  }
+
+  .game-screen.bleed .decision-panel { padding: 0; background: none; border: 0; box-shadow: none; }
+  .game-screen.bleed .thumb-bar { margin-top: 10px; }
+  /* the caption bubble would collide with the sheet at the bottom */
+  .game-screen.bleed .visual-caption { bottom: auto; top: 8%; }
+}
+
+/* The sheet with everything in it stood 566px tall and buried the plate it was
+   supposed to sit on. The title and the situation are the two shortest, most
+   readable pieces, so they lift out of the sheet and sit in the plate's top
+   negative space — the quiet area the portrait extension added. What stays on
+   the glass is only what you act on: AXIOM's claim, the question, the answers. */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet { padding-top: 12px; }
+
+  .game-screen.bleed .step-situation {
+    position: absolute;
+    left: 0; right: 0; bottom: 100%;
+    padding: 0 18px 16px;
+    text-align: left;
+    /* the plate is light up there, so the type carries itself with weight
+       rather than a slab of scrim */
+    text-shadow: 0 1px 12px rgba(250, 246, 240, 0.9), 0 1px 3px rgba(250, 246, 240, 1);
+  }
+  .game-screen.bleed .step-situation h2 { margin: 0 0 4px; }
+  .game-screen.bleed .step-situation .situation-copy { margin: 0; }
+
+  /* the progress rail and the section label already say where we are */
+  .game-screen.bleed .round-meta { display: none; }
+  .game-screen.bleed .micro-label { margin-bottom: 6px; }
+}
+
+/* First pass put the title straight through the caption bubble, and framed the
+   plate on its empty plaza while the cars and the characters sat behind the
+   glass. The bubble goes (the situation line says the same thing, better), the
+   title block gets the top strip to itself, and the plate is anchored so the
+   scene lands in the clear zone rather than the extension. */
+@media (max-width: 820px) {
+  .game-screen.bleed .visual-caption { display: none; }
+
+  .game-screen.bleed .step-situation {
+    padding: 0 18px 14px;
+    border: 0;
+  }
+  .game-screen.bleed .step-situation::before { display: none; }
+
+  /* the clear strip is the top of the frame, so pull the plate down: the
+     scene sits in it and the quiet extension goes behind the sheet */
+  .game-screen.bleed .character-scene img { object-position: 50% 78%; }
+}
+
+/* The sheet was reading as a cream slab: 0.78 alpha under a 24px blur, with the
+   AXIOM panel, the question bar and both answer cards stacking their own opaque
+   fills on top of it. Three translucent layers multiply into an opaque one.
+   So the sheet drops to a real glass alpha and everything riding on it goes
+   lighter still — the plate has to be legible through the whole panel, which is
+   the entire point of bleeding it. Blur comes down too: at 24px the art behind
+   was mush, and it needs to still read as the scene. */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet {
+    background: linear-gradient(to bottom,
+      rgba(250, 246, 240, 0.30) 0%,
+      rgba(250, 246, 240, 0.46) 22%,
+      rgba(250, 246, 240, 0.52) 100%);
+    backdrop-filter: blur(14px) saturate(1.15);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    box-shadow: 0 -16px 40px rgba(23, 54, 95, 0.16);
+  }
+
+  /* AXIOM's claim: was a solid tinted panel, now glass over the plate */
+  .game-screen.bleed .axiom-panel {
+    background: rgba(255, 255, 255, 0.34);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  /* the question keeps its coral identity, just stops being a fill */
+  .game-screen.bleed .question-bar {
+    background: linear-gradient(135deg, rgba(232, 102, 87, 0.20), rgba(255, 255, 255, 0.30));
+  }
+  /* answers stay the most solid thing on screen — they are the tap target */
+  .game-screen.bleed .decision-button {
+    background: rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* the plate is 2:3 and the frame is near enough the same, so it lands whole —
+     no need to push it off centre now that it reads through the glass */
+  .game-screen.bleed .character-scene img { object-position: 50% 50%; }
+}
+
+/* The plate is 2:3 and the frame is near enough the same, so it landed whole —
+   which put the quiet plaza in the clear strip at the top and the actual scene,
+   the cars and both characters, down behind the glass. Nudge it up: the frame
+   crops a little off the sides, the story moves into the part you can see
+   properly, and the extension goes where it was always meant to go — under the
+   panel. */
+@media (max-width: 820px) {
+  .game-screen.bleed .character-scene img {
+    height: 122%;
+    top: -14%;
+  }
+}
+
+/* ============================================================
+   BLEED, PASS 2 (2026-09-01)
+
+   Kish: "i want completee transparent box, the base image should be
+   visible." The sheet was still a tinted, blurred plane — so it goes
+   fully transparent and the plate is the background, uninterrupted.
+   What carries the content now is the individual boxes: AXIOM's claim
+   and the question. They stay legible because they are tinted glass in
+   their own right, not because a slab sits behind them.
+
+   Also: the hero beat had gone dim. In bleed the plate is the screen's
+   backdrop at z-index 0, which put it *under* the veil instead of
+   punching through it, so the "full screen" moment showed a dimmed
+   plate. It has to sit above the veil while the veil is up.
+   ============================================================ */
+@media (max-width: 820px) {
+  /* the plate is the background — nothing between it and the eye */
+  .game-screen.bleed .panel-sheet {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  /* the veil dims the screen; the plate is the thing it is dimming *around* */
+  .game-screen.bleed.staged:not(.veil-out):not(.stage-done) .question-visual {
+    z-index: 45;
+  }
+
+  /* AXIOM's claim — same box as the question, in amber instead of coral.
+     Two tinted panels, one for what it decided, one for what you decide. */
+  .game-screen.bleed .axiom-panel {
+    border-radius: 18px;
+    border: 1px solid rgba(217, 142, 43, 0.34);
+    border-left: 4px solid var(--amber, #d98e2b);
+    background: linear-gradient(135deg, rgba(217, 142, 43, 0.20), rgba(255, 255, 255, 0.42));
+    backdrop-filter: blur(10px) saturate(1.15);
+    -webkit-backdrop-filter: blur(10px) saturate(1.15);
+    box-shadow: 0 10px 26px rgba(217, 142, 43, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+  .game-screen.bleed .axiom-who { color: #9a6410; }
+
+  /* the question keeps the coral it already had, matched in weight to the amber */
+  .game-screen.bleed .question-bar {
+    background: linear-gradient(135deg, rgba(232, 102, 87, 0.20), rgba(255, 255, 255, 0.42));
+  }
+
+  /* answers are the tap target, so they stay the most solid thing here */
+  .game-screen.bleed .decision-button {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+  }
+
+  /* with no sheet behind it, the practice line needs to carry itself */
+  .game-screen.bleed .micro-label {
+    color: var(--navy, #17365f);
+    text-shadow: 0 1px 10px rgba(250, 246, 240, 0.95), 0 1px 3px rgba(250, 246, 240, 1);
+  }
+}
+
+/* ============================================================
+   BLEED, PASS 3 — LIQUID GLASS (2026-09-01)
+
+   Kish, on the marked-up screens:
+     1. the situation needs its own yellow glass box, not a bare left bar
+     2. the AXIOM box "is blue only, not yellow" — and AXIOM CHOSE goes black
+     3. YOUR CALL (same treatment — it was washing out against the road)
+
+   Why it read blue: the tint was rgba(217,142,43,.20) mixed with
+   rgba(255,255,255,.42). The white was carrying twice the weight of the
+   amber, so over a grey wet road the panel took the road's colour and
+   the amber never showed. Fixed by tinting with warm yellow at real
+   strength and dropping the white to a warm cream rather than neutral.
+
+   Both labels go near-black: coral and amber type on a busy plate was
+   the least readable thing on the screen. The colour identity now lives
+   in the box, which is where it survives any backdrop.
+   ============================================================ */
+@media (max-width: 820px) {
+  /* the shared liquid-glass body: warm tint, edge light, inner sheen */
+  .game-screen.bleed .step-situation,
+  .game-screen.bleed .axiom-panel,
+  .game-screen.bleed .question-bar {
+    position: relative;
+    border-radius: 20px;
+    backdrop-filter: blur(16px) saturate(1.5) brightness(1.06);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5) brightness(1.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.75),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+      0 8px 26px rgba(23, 54, 95, 0.16);
+  }
+
+  /* --- 1. the situation gets a box of its own ------------------------ */
+  .game-screen.bleed .step-situation {
+    position: absolute;
+    left: 16px; right: 16px; bottom: calc(100% - 6px);
+    padding: 14px 16px 15px;
+    border: 1px solid rgba(214, 158, 46, 0.42);
+    border-left: 4px solid #e8b53d;
+    background: linear-gradient(135deg, rgba(255, 206, 92, 0.46), rgba(255, 241, 204, 0.40));
+    text-shadow: none;
+  }
+  .game-screen.bleed .step-situation h2 { margin: 0 0 3px; }
+  .game-screen.bleed .step-situation .situation-copy { margin: 0; }
+
+  /* --- 2. AXIOM: actually yellow now, label black -------------------- */
+  .game-screen.bleed .axiom-panel {
+    border: 1px solid rgba(214, 158, 46, 0.42);
+    border-left: 4px solid #e8b53d;
+    background: linear-gradient(135deg, rgba(255, 206, 92, 0.46), rgba(255, 241, 204, 0.40));
+  }
+  .game-screen.bleed .axiom-who { color: #1a1a1a; }
+
+  /* --- 3. the question keeps the red, label black to match ----------- */
+  .game-screen.bleed .question-bar {
+    border: 1px solid rgba(232, 102, 87, 0.42);
+    border-left: 4px solid var(--coral, #e86657);
+    background: linear-gradient(135deg, rgba(255, 138, 120, 0.44), rgba(255, 226, 218, 0.40));
+  }
+  .game-screen.bleed .question-bar-label { color: #1a1a1a; }
+}
+
+/* ============================================================
+   BLEED, PASS 4 — SUBTLE (2026-09-01)
+
+   Kish: "this is so much colour, i want it subtle and premium only…
+   so yellow, blue, red is the order. and use the same lightness of
+   colour in the previous render."
+
+   Pass 3 was loud for two compounding reasons: the fills went up to
+   ~0.46 alpha AND the backdrop filter was running saturate(1.5)
+   brightness(1.06), so the plate behind was pushed hotter before the
+   tint even landed on it. Both come back down here.
+
+   The order is now a real sequence rather than two yellows: the
+   situation is yellow, AXIOM's claim is blue — AXIOM's own colour, and
+   the thing pass 3 was fighting to suppress — and your call is red.
+   Setup, machine, you.
+
+   Hue is held with a tinted light rather than white: white at these
+   alphas washes the hue out and the panel takes the colour of whatever
+   is behind it, which is what turned the amber grey-blue in pass 2.
+   ============================================================ */
+@media (max-width: 820px) {
+  .game-screen.bleed .step-situation,
+  .game-screen.bleed .axiom-panel,
+  .game-screen.bleed .question-bar {
+    /* no saturate/brightness push — the plate stays the colour it was painted */
+    backdrop-filter: blur(16px) saturate(1.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 6px 20px rgba(23, 54, 95, 0.10);
+    border-width: 1px;
+    border-left-width: 3px;
+  }
+
+  /* 1 — the situation: yellow */
+  .game-screen.bleed .step-situation {
+    border-color: rgba(214, 158, 46, 0.30);
+    border-left-color: rgba(214, 158, 46, 0.75);
+    background: linear-gradient(135deg, rgba(240, 190, 90, 0.22), rgba(255, 247, 230, 0.30));
+  }
+
+  /* 2 — AXIOM's claim: blue, which is AXIOM's own colour */
+  .game-screen.bleed .axiom-panel {
+    border-color: rgba(23, 54, 95, 0.26);
+    border-left-color: rgba(23, 54, 95, 0.62);
+    background: linear-gradient(135deg, rgba(86, 126, 186, 0.22), rgba(234, 241, 252, 0.30));
+  }
+
+  /* 3 — your call: red */
+  .game-screen.bleed .question-bar {
+    border-color: rgba(232, 102, 87, 0.30);
+    border-left-color: rgba(232, 102, 87, 0.72);
+    background: linear-gradient(135deg, rgba(228, 122, 106, 0.22), rgba(255, 240, 236, 0.30));
+  }
+}
+
+/* ============================================================
+   BLEED, PASS 5 (2026-09-01)
+   Kish swapped the ends: the situation takes the red, your call takes
+   the yellow. AXIOM keeps the blue in the middle. The situation's inner
+   rule — the reveal-step bar sitting inside the box — goes red with it;
+   it was still amber and reading as a second, competing accent.
+   ============================================================ */
+@media (max-width: 820px) {
+  /* 1 — the situation: red */
+  .game-screen.bleed .step-situation {
+    border-color: rgba(232, 102, 87, 0.30);
+    border-left-color: rgba(232, 102, 87, 0.72);
+    background: linear-gradient(135deg, rgba(228, 122, 106, 0.22), rgba(255, 240, 236, 0.30));
+  }
+  /* the inner rule the reveal steps carry — red, not amber */
+  .game-screen.bleed .step-situation .situation-copy {
+    border-left-color: rgba(232, 102, 87, 0.72);
+  }
+
+  /* 3 — your call: yellow */
+  .game-screen.bleed .question-bar {
+    border-color: rgba(214, 158, 46, 0.30);
+    border-left-color: rgba(214, 158, 46, 0.75);
+    background: linear-gradient(135deg, rgba(240, 190, 90, 0.22), rgba(255, 247, 230, 0.30));
+  }
+}
+
+/* ============================================================
+   BLEED, PASS 6 (2026-09-01)
+   Kish: yellow -> green on YOUR CALL, so the colours read as the actual
+   move — red is the question put to you, green is your answer. And a
+   "See full image" button under the section label, because the panel
+   covers the plate once the reveal lands and there was no way back to it.
+   ============================================================ */
+
+/* the button only exists where the plate is the backdrop */
+.plate-peek-btn { display: none; }
+
+@media (max-width: 820px) {
+  /* --- your call: green ------------------------------------------- */
+  .game-screen.bleed .question-bar {
+    border-color: rgba(76, 140, 96, 0.30);
+    border-left-color: rgba(76, 140, 96, 0.75);
+    background: linear-gradient(135deg, rgba(104, 168, 118, 0.22), rgba(233, 246, 234, 0.30));
+  }
+
+  /* --- see full image --------------------------------------------- */
+  .game-screen.bleed .plate-peek-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    position: absolute; top: 38px; left: 16px; z-index: 14;
+    padding: 6px 12px 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(23, 54, 95, 0.32);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    color: rgba(255, 255, 255, 0.95);
+    font: 700 11px/1 "Manrope", sans-serif;
+    letter-spacing: .13em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .game-screen.bleed .plate-peek-btn::before {
+    content: ""; width: 11px; height: 11px; flex: 0 0 11px;
+    border: 1.5px solid currentColor; border-radius: 2.5px;
+    box-shadow: inset 0 0 0 1.5px transparent;
+  }
+  .game-screen.bleed .plate-peek-btn:active { transform: scale(.96); background: rgba(23, 54, 95, 0.45); }
+  /* nothing to peek at while the plate already owns the screen */
+  .game-screen.bleed.staged:not(.veil-out):not(.stage-done) .plate-peek-btn { opacity: 0; pointer-events: none; }
+
+  /* --- the peek: same move as the veil, without the countdown ------ */
+  .game-screen.bleed.plate-peek .panel-sheet { transform: translateY(101%); }
+  .game-screen.bleed.plate-peek .question-visual { z-index: 45; }
+  .game-screen.bleed.plate-peek .plate-peek-btn { opacity: 0; pointer-events: none; }
+  .game-screen.bleed.plate-peek .character-scene img {
+    height: 100%; top: 0;
+    transition: height .45s cubic-bezier(.2,.7,.3,1), top .45s cubic-bezier(.2,.7,.3,1);
+  }
+}
+
+/* ============================================================
+   BLEED, PASS 7 (2026-09-01)
+   1. section label sits higher and smaller — it is a tag, not a heading
+   2. the practice line goes plain white bold. It was navy with a cream
+      halo, which was the loudest thing on the plate for a line that
+      only shows on the warm-up
+   3. the plate's corners were square where everything else on the
+      screen is rounded
+   ============================================================ */
+@media (max-width: 820px) {
+  /* 3 — round the plate */
+  .game-screen.bleed .character-scene { border-radius: 26px 26px 20px 20px; }
+
+  /* 1 — label up and down a size */
+  .game-screen.bleed .scene-meta {
+    top: 6px;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+  }
+  .game-screen.bleed .scene-meta b { font-size: 0.68rem; padding: 4px 10px; }
+  .game-screen.bleed .plate-peek-btn { top: 30px; }
+
+  /* 2 — plain white, bolder, no halo */
+  .game-screen.bleed .micro-label {
+    color: #fff;
+    font-weight: 800;
+    text-shadow: none;
+  }
+}
+
+/* ============================================================
+   BLEED, PASS 8 (2026-09-01) — TWO LINES ONLY
+
+   White goes on exactly the two body lines Kish marked: what AXIOM
+   chose, and the question. Everything else keeps the colour it already
+   had — the title and the situation copy stay navy, and both labels
+   stay black. (The practice line was already white from pass 7.)
+
+   The halo stays on the two that turned white: the boxes are
+   translucent, so on a pale passage of a plate white type would
+   otherwise drop out entirely.
+   ============================================================ */
+@media (max-width: 820px) {
+  .game-screen.bleed .axiom-line-reveal,
+  .game-screen.bleed .question-bar strong {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(12, 26, 48, 0.45), 0 0 18px rgba(12, 26, 48, 0.28);
+  }
+}
+
+/* Pass 7 rounded the plate itself, which pulled the artwork off the edges and
+   let the page show through the corners. It's the dark overlay that gets the
+   radius: the plate bleeds square to the edges, the scrim sits rounded on top. */
+@media (max-width: 820px) {
+  .game-screen.bleed .character-scene { border-radius: 0; }
+  .game-screen.bleed .character-vignette { border-radius: 26px 26px 20px 20px; }
+}
+
+/* LOGIC SIGNAL and SEE FULL IMAGE already shared a left edge at 16px — what set
+   them apart was the type: 10.88px at 1.74 tracking against the button's 11px at
+   1.43. Matched exactly, and the label goes heavier so it leads the pill under it. */
+@media (max-width: 820px) {
+  .game-screen.bleed .scene-meta {
+    font-size: 11px;
+    letter-spacing: 1.43px;
+    font-weight: 800;
+  }
+  .game-screen.bleed .scene-meta span { font-weight: 800; }
+}
+
+/* LOGIC SIGNAL up a size, and a recording dot in front of it — it reads as a
+   live feed off the scene rather than a caption sitting on it. */
+@media (max-width: 820px) {
+  .game-screen.bleed .scene-meta {
+    font-size: 14px;
+    letter-spacing: 1.7px;
+  }
+  .game-screen.bleed .scene-meta span {
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .game-screen.bleed .scene-meta span::before {
+    content: "";
+    width: 9px; height: 9px; flex: 0 0 9px;
+    border-radius: 50%;
+    background: #ef3b3b;
+    box-shadow: 0 0 0 3px rgba(239, 59, 59, 0.22), 0 0 10px rgba(239, 59, 59, 0.8);
+    animation: recBlink 1.6s ease-in-out infinite;
+  }
+}
+@keyframes recBlink {
+  0%, 42%  { opacity: 1;   box-shadow: 0 0 0 3px rgba(239,59,59,.22), 0 0 10px rgba(239,59,59,.8); }
+  62%, 88% { opacity: .28; box-shadow: 0 0 0 2px rgba(239,59,59,.10), 0 0 4px rgba(239,59,59,.35); }
+  100%     { opacity: 1;   box-shadow: 0 0 0 3px rgba(239,59,59,.22), 0 0 10px rgba(239,59,59,.8); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-screen.bleed .scene-meta span::before { animation: none; }
+}
+
+/* Shadows off the two white lines — Kish wants them plain white, nothing else. */
+@media (max-width: 820px) {
+  .game-screen.bleed .axiom-line-reveal,
+  .game-screen.bleed .question-bar strong { text-shadow: none; }
+}
+
+/* AXIOM CHOSE was running 10.4px against YOUR CALL's 11.2 — it wasn't just
+   reading small, it was smaller. Both go to 12.5px so the pair stays matched
+   and the label holds its own against the copy under it.
+
+   And the body copy comes off pure white: AXIOM's line takes a blue cast, the
+   question takes green, each pulling from the box it sits in. Slightly off
+   white also drops the glare Kish flagged, without going grey. */
+@media (max-width: 820px) {
+  .game-screen.bleed .axiom-who,
+  .game-screen.bleed .question-bar-label {
+    font-size: 12.5px;
+    letter-spacing: 2.2px;
+  }
+
+  .game-screen.bleed .axiom-line-reveal   { color: #cddef4; }  /* blue-white */
+  .game-screen.bleed .question-bar strong { color: #d2ead8; }  /* green-white */
+}
+
+/* ============================================================
+   FEEDBACK SCREEN — SAME LANGUAGE AS THE QUESTION (2026-09-01)
+
+   Approved design carried across. The feedback screen is seen twelve
+   times a run, more than any other, and it was still the old shape: a
+   letterboxed band of art over an opaque cream panel. Now it is the same
+   full-bleed plate with the panel riding on it as glass.
+
+   The verdict box takes green on a right call and red on a wrong one —
+   the same two roles the question screen uses, so the colour keeps
+   meaning the same thing from screen to screen.
+   ============================================================ */
+@media (max-width: 820px) {
+  .feedback-screen.bleed {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    display: block;
+    height: calc(100dvh - 92px);
+  }
+
+  .feedback-screen.bleed .feedback-visual {
+    position: absolute; inset: 0; z-index: 0;
+    margin: 0; padding: 0; display: block;
+    flex: none; max-height: none;
+  }
+  .feedback-screen.bleed .character-scene {
+    width: 100%; height: 100%;
+    min-height: 0; max-height: none;
+    border: 0; border-radius: 0; box-shadow: none;
+    flex: none;
+  }
+  .feedback-screen.bleed .character-scene img {
+    object-fit: cover; height: 122%; top: -14%;
+  }
+  .feedback-screen.bleed .character-vignette { border-radius: 26px 26px 20px 20px; }
+  .feedback-screen.bleed .visual-caption { display: none; }
+
+  /* the panel rides on the plate, transparent like the question sheet */
+  .feedback-screen.bleed .feedback-panel {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 10;
+    padding: 14px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: none; border: 0; box-shadow: none;
+    display: flex; flex-direction: column;
+  }
+
+  .feedback-screen.bleed .micro-label {
+    color: #fff; font-weight: 800; text-shadow: none;
+  }
+  .feedback-screen.bleed .feedback-score h2 { color: #fff; }
+
+  /* the explanation gets the glass box, coloured by the verdict */
+  .feedback-screen.bleed .feedback-panel > p {
+    margin: 10px 0 0;
+    padding: 14px 16px;
+    border-radius: 20px;
+    border: 1px solid;
+    border-left: 3px solid;
+    backdrop-filter: blur(16px) saturate(1.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.08);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 6px 20px rgba(23,54,95,.10);
+  }
+  .feedback-screen.bleed.success .feedback-panel > p {
+    border-color: rgba(76, 140, 96, 0.30);
+    border-left-color: rgba(76, 140, 96, 0.75);
+    background: linear-gradient(135deg, rgba(156, 214, 170, 0.30), rgba(249, 254, 250, 0.52));
+    color: #d2ead8;
+  }
+  .feedback-screen.bleed.failure .feedback-panel > p {
+    border-color: rgba(232, 102, 87, 0.30);
+    border-left-color: rgba(232, 102, 87, 0.72);
+    background: linear-gradient(135deg, rgba(255, 176, 162, 0.30), rgba(255, 251, 250, 0.52));
+    color: #f7dfda;
+  }
+}
+
+/* The verdict chip and the snap recap chips were outline-only — coral or green
+   hairlines over artwork, which is the one thing that does not survive a plate
+   behind it. They take the same glass body as everything else. */
+@media (max-width: 820px) {
+  .feedback-screen.bleed .feedback-chip {
+    border-radius: 999px;
+    border: 1px solid;
+    backdrop-filter: blur(14px) saturate(1.08);
+    -webkit-backdrop-filter: blur(14px) saturate(1.08);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+    font-weight: 800;
+  }
+  .feedback-screen.bleed.success .feedback-chip {
+    border-color: rgba(76, 140, 96, 0.40);
+    background: linear-gradient(135deg, rgba(156, 214, 170, 0.34), rgba(249, 254, 250, 0.50));
+    color: #eafaee;
+  }
+  .feedback-screen.bleed.failure .feedback-chip {
+    border-color: rgba(232, 102, 87, 0.42);
+    background: linear-gradient(135deg, rgba(255, 176, 162, 0.34), rgba(255, 251, 250, 0.50));
+    color: #ffeae5;
+  }
+
+  .feedback-screen.bleed .snap-recap span {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    color: #fff;
+  }
+  .feedback-screen.bleed .snap-recap span.right { background: rgba(104, 168, 118, 0.36); }
+  .feedback-screen.bleed .snap-recap span.wrong { background: rgba(228, 122, 106, 0.36); }
+
+  /* the score reads against the plate, so it needs to be as solid as the title */
+  .feedback-screen.bleed .feedback-score strong { color: #ffd7cd; }
+  .feedback-screen.bleed.success .feedback-score strong { color: #d6f2dd; }
+}
+
+/* Kish: "make this opacity more, nothing is visible." The chips and the
+   explanation box were built at the same alpha as the question screen's boxes,
+   but those sit over the plate's quiet extension — these sit over the middle of
+   the scene, which is the busiest part of the artwork. Same design, more body:
+   the tint roughly doubles and the light stop goes up with it, so the copy has
+   something solid behind it wherever the plate happens to be dark. */
+@media (max-width: 820px) {
+  /* verdict chip */
+  .feedback-screen.bleed .feedback-chip {
+    border-width: 1.5px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 6px 18px rgba(23,54,95,.16);
+  }
+  .feedback-screen.bleed.failure .feedback-chip {
+    border-color: rgba(232, 102, 87, 0.62);
+    background: linear-gradient(135deg, rgba(226, 96, 78, 0.62), rgba(255, 236, 231, 0.68));
+    color: #fff;
+  }
+  .feedback-screen.bleed.success .feedback-chip {
+    border-color: rgba(76, 140, 96, 0.62);
+    background: linear-gradient(135deg, rgba(78, 152, 100, 0.62), rgba(236, 250, 239, 0.68));
+    color: #fff;
+  }
+
+  /* explanation box */
+  .feedback-screen.bleed.failure .feedback-panel > p {
+    border-color: rgba(232, 102, 87, 0.52);
+    border-left-color: rgba(232, 102, 87, 0.9);
+    background: linear-gradient(135deg, rgba(226, 96, 78, 0.46), rgba(255, 240, 236, 0.62));
+    color: #fff;
+  }
+  .feedback-screen.bleed.success .feedback-panel > p {
+    border-color: rgba(76, 140, 96, 0.52);
+    border-left-color: rgba(76, 140, 96, 0.9);
+    background: linear-gradient(135deg, rgba(78, 152, 100, 0.46), rgba(238, 251, 241, 0.62));
+    color: #fff;
+  }
+
+  /* the per-question recap chips */
+  .feedback-screen.bleed .snap-recap span {
+    border-width: 1.5px;
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff; font-weight: 800;
+    box-shadow: 0 4px 14px rgba(23,54,95,.18);
+  }
+  .feedback-screen.bleed .snap-recap span.right { background: rgba(78, 152, 100, 0.72); }
+  .feedback-screen.bleed .snap-recap span.wrong { background: rgba(226, 96, 78, 0.72); }
+}
+
+/* ============================================================
+   SECTION INTRO + AXIOM INTRO — SAME LANGUAGE (2026-09-01)
+
+   The last two mobile screens carrying artwork. Both had it as a
+   letterboxed band over an opaque panel, which is the shape the
+   question and feedback screens have now left behind.
+
+   One difference worth knowing: these two use 1:1 art (the four section
+   plates and AXIOM's portrait), not the 2:3 portraits. A square filling
+   a phone frame crops roughly a third off each side, so instead of
+   cover-cropping the subject away, the art is anchored to the top of
+   the frame where these compositions put their subject, and the copy
+   sheet takes the lower half. Generating 2:3 versions of these five
+   would let them bleed exactly like the questions do.
+   ============================================================ */
+@media (max-width: 820px) {
+  .section-intro-screen.bleed,
+  .axiom-screen.bleed {
+    position: relative; overflow: hidden; padding: 0; display: block;
+    height: calc(100dvh - 92px);
+  }
+
+  .section-intro-screen.bleed .section-intro-visual,
+  .axiom-screen.bleed .axiom-visual {
+    position: absolute; inset: 0; z-index: 0; margin: 0; padding: 0; display: block;
+  }
+  .section-intro-screen.bleed .character-scene,
+  .axiom-screen.bleed .character-scene {
+    width: 100%; height: 100%;
+    min-height: 0; max-height: none;
+    border: 0; border-radius: 0; box-shadow: none;
+    aspect-ratio: auto;
+  }
+  /* 1:1 art in a portrait frame: hold the top, where the subject sits */
+  .section-intro-screen.bleed .character-scene img,
+  .axiom-screen.bleed .character-scene img {
+    object-fit: cover; object-position: 50% 18%;
+    height: 100%; top: 0;
+  }
+  .section-intro-screen.bleed .character-vignette,
+  .axiom-screen.bleed .character-vignette { border-radius: 26px 26px 20px 20px; }
+
+  /* copy rides on the plate */
+  .section-intro-screen.bleed .section-intro-copy,
+  .axiom-screen.bleed .axiom-copy {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 10;
+    padding: 16px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    background: none; border: 0; box-shadow: none;
+    display: flex; flex-direction: column;
+  }
+  .section-intro-screen.bleed .micro-label,
+  .axiom-screen.bleed .micro-label { color: #fff; font-weight: 800; text-shadow: none; }
+  .section-intro-screen.bleed h2,
+  .axiom-screen.bleed h2 { color: #fff; }
+
+  /* the body copy takes the blue glass — this is AXIOM's voice and the
+     section's framing, the same role the AXIOM box holds in a question */
+  .section-intro-screen.bleed .section-intro-copy > p,
+  .axiom-screen.bleed .axiom-line {
+    margin: 8px 0 0;
+    padding: 12px 15px;
+    border-radius: 18px;
+    border: 1px solid rgba(96, 138, 198, 0.42);
+    border-left: 3px solid rgba(58, 100, 165, 0.85);
+    background: linear-gradient(135deg, rgba(96, 140, 205, 0.44), rgba(240, 246, 255, 0.60));
+    backdrop-filter: blur(16px) saturate(1.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.08);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 6px 18px rgba(23,54,95,.14);
+    color: #fff;
+  }
+  .axiom-screen.bleed .axiom-line.strong {
+    border-color: rgba(232, 102, 87, 0.52);
+    border-left-color: rgba(232, 102, 87, 0.9);
+    background: linear-gradient(135deg, rgba(226, 96, 78, 0.46), rgba(255, 240, 236, 0.62));
+  }
+
+  /* the section stats read straight on the plate, so they need bodies too */
+  .section-intro-screen.bleed .section-rules span {
+    background: rgba(23, 54, 95, 0.42);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+  }
+  .section-intro-screen.bleed .section-rules b { color: #fff; }
+}
+
+/* The big section numeral was a pale tint designed for a cream panel; on the
+   plate it disappeared entirely. It becomes a glass chip like everything else.
+   And the tier screen was the last mobile screen still scrolling — 17px, which
+   is exactly the kind of nudge Kish has been asking me to kill everywhere. */
+@media (max-width: 820px) {
+
+  /* tier screen: 17px over. The gaps give way, never the tap targets. */
+  .tier-screen { padding-top: 10px; padding-bottom: 10px; }
+  .tier-screen .tier-grid { gap: 10px; }
+  .tier-screen h2 { margin-bottom: 6px; }
+}
+
+/* Tier screen came to 92 (topbar) + 579 = 671 against 664 of viewport. The 18px
+   column gap between the heading and the cards is the cheapest 8px on the
+   screen — the cards themselves stay full size. */
+@media (max-width: 820px) {
+  .tier-screen { gap: 10px; }
+}
+
+/* Kish: black copy in the verdict chip and the explanation box, both verdicts.
+   The fills are solid enough now to carry dark type, and black reads harder
+   against a green or red ground than the near-white did. */
+@media (max-width: 820px) {
+  .feedback-screen.bleed .feedback-chip,
+  .feedback-screen.bleed.success .feedback-chip,
+  .feedback-screen.bleed.failure .feedback-chip,
+  .feedback-screen.bleed .feedback-panel > p,
+  .feedback-screen.bleed.success .feedback-panel > p,
+  .feedback-screen.bleed.failure .feedback-panel > p {
+    color: #1a1a1a;
+  }
+}
+
+/* iPhone SE and the older 360x640 Androids: the tier screen needs 671px of a
+   568px viewport. Everything above shrinks proportionally rather than the cards
+   losing their tap area — 44px minimum stands. */
+@media (max-width: 820px) and (max-height: 700px) {
+  .tier-screen { gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+  .tier-screen .tier-head h2 { font-size: 1.28rem; margin: 0 0 2px; }
+  .tier-screen .tier-head p { font-size: 0.92rem; line-height: 1.3; margin: 0; }
+  .tier-screen .tier-grid { gap: 8px; }
+  .tier-screen .tier-card { padding: 10px 12px; min-height: 44px; }
+  .tier-screen .tier-card h3 { font-size: 1.02rem; margin: 0 0 2px; }
+  .tier-screen .tier-card p { font-size: 0.86rem; line-height: 1.28; }
+}
+
+/* 320x568 (original SE, and the smallest Androids still in the wild) is 35px
+   over even after the 700px tier. One more step down: the descriptions under
+   each tier title are the only thing here that is nice-to-have. */
+@media (max-width: 820px) and (max-height: 600px) {
+  .tier-screen .tier-head p { display: none; }
+  .tier-screen .tier-card p { font-size: 0.8rem; line-height: 1.24; }
+  .tier-screen .tier-card { padding: 8px 11px; }
+  .tier-screen .tier-grid { gap: 6px; }
+}
+
+/* ============================================================
+   THE SITUATION BOX COLLIDED WITH THE SECTION LABEL (2026-09-01)
+
+   The situation was absolutely positioned at bottom:100% of the sheet —
+   it floated directly above whatever height the sheet happened to be.
+   On the warm-up that was fine. On a question with three lines of AXIOM
+   copy the sheet is taller, so the box rode up over "STRATEGY SIGNAL"
+   and the record dot. Nudging the offset would only move which question
+   breaks.
+
+   So the sheet now spans a known area — from under the label down to the
+   bottom — and lays its children out bottom-up inside it. The situation
+   goes back into normal flow as the first child. The stack can no longer
+   climb past the top of that area whatever the copy length, and the
+   variable space shows up as breathing room over the plate instead.
+   ============================================================ */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet {
+    top: 52px;           /* clears the section label and the peek button */
+    justify-content: flex-end;
+  }
+
+  .game-screen.bleed .step-situation {
+    position: static;
+    left: auto; right: auto; bottom: auto;
+    margin: 0 0 10px;
+    padding: 14px 16px 15px;
+  }
+}
+
+/* The sheet's area still wasn't enough for the longest questions, so the stack
+   pushed up past its own top and back over the label. The area now starts
+   clear of the peek button, and the rhythm inside tightens to buy the ~40px
+   that the worst case was short by. Type sizes are untouched — spacing gives
+   way, never the copy. */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet { top: 60px; }
+  .game-screen.bleed .step-situation { margin: 0 0 6px; padding: 11px 14px 12px; }
+  .game-screen.bleed .axiom-panel { margin: 0 0 6px; padding: 10px 14px 11px; }
+  .game-screen.bleed .step-axiom { margin: 0; }
+  .game-screen.bleed .step-question { margin: 0; }
+  .game-screen.bleed .question-bar { margin: 0; padding: 10px 14px 11px; }
+  .game-screen.bleed .thumb-bar { margin-top: 6px; }
+  .game-screen.bleed .step-situation h2 { margin: 0 0 2px; }
+}
+
+/* ============================================================
+   MAKE THE OVERLAP IMPOSSIBLE, NOT UNLIKELY (2026-09-01)
+
+   Tightening the rhythm bought most questions enough room but not all —
+   the longest copy still climbed over the label on a 664px iPhone and
+   badly on a 568px SE. Chasing it question by question would leave the
+   next long one to break.
+
+   So the sheet is now a hard-bounded box: it starts below the label and
+   ends at the bottom, and anything that will not fit scrolls INSIDE it.
+   The page itself never scrolls, the label is never covered, and on
+   every question that does fit there is nothing to scroll. Short
+   viewports also step the copy down slightly, so the number of
+   questions that need to scroll at all stays near zero.
+   ============================================================ */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .game-screen.bleed .panel-sheet::-webkit-scrollbar { display: none; }
+}
+
+/* Short phones: step the copy down so the stack fits without scrolling. */
+@media (max-width: 820px) and (max-height: 700px) {
+  .game-screen.bleed .step-situation h2 { font-size: 1.32rem; }
+  .game-screen.bleed .situation-copy { font-size: 1rem; line-height: 1.34; }
+  .game-screen.bleed .axiom-line-reveal { font-size: 1.02rem; line-height: 1.34; }
+  .game-screen.bleed .question-bar strong { font-size: 1.12rem; line-height: 1.28; }
+  .game-screen.bleed .decision-button { padding: 10px 12px; }
+  .game-screen.bleed .decision-button h3 { font-size: 1.02rem; }
+  .game-screen.bleed .decision-button p { font-size: 0.86rem; line-height: 1.26; }
+}
+@media (max-width: 820px) and (max-height: 620px) {
+  .game-screen.bleed .step-situation h2 { font-size: 1.16rem; }
+  .game-screen.bleed .situation-copy { font-size: 0.92rem; }
+  .game-screen.bleed .axiom-line-reveal { font-size: 0.94rem; }
+  .game-screen.bleed .question-bar strong { font-size: 1rem; }
+  .game-screen.bleed .decision-button p { font-size: 0.8rem; }
+}
+
+/* justify-content: flex-end is why nothing scrolled and the copy escaped past
+   the top: when a flex container's content overflows, flex-end pushes the
+   overflow out of the START edge, where it is unreachable — the scrollport
+   cannot scroll to it. The standard fix is to bottom-align with an auto margin
+   on the first child instead, which leaves the overflow on the end edge where
+   overflow-y can actually reach it. */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet { justify-content: flex-start; }
+  .game-screen.bleed .panel-sheet > *:first-child { margin-top: auto; }
+}
+
+/* Last hole: on a 320x568 the whole sheet scrolled, answers included, so on the
+   longest question the buttons sat below the fold. Only the copy scrolls now —
+   the answers are pinned outside the scrollport and are always reachable, which
+   is the one thing on this screen that must never need a scroll to reach. */
+@media (max-width: 820px) {
+  .game-screen.bleed .panel-sheet { overflow: visible; }
+  .game-screen.bleed .decision-panel {
+    flex: 0 1 auto; min-height: 0;
+    overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .game-screen.bleed .decision-panel::-webkit-scrollbar { display: none; }
+  .game-screen.bleed .thumb-bar { flex: 0 0 auto; }
+}
+
+/* ============================================================
+   VISHRUT — ROUND 01 (2026-09-02)
+   Ten sticky notes off the design canvas, phone only. Desktop is
+   untouched. Item numbers match the note list Kish approved.
+   ============================================================ */
+@media (max-width: 820px) {
+  /* 1 — welcome: everything centre-aligned */
+  .welcome-screen .welcome-copy { text-align: center; align-items: center; }
+  .welcome-screen .welcome-copy .micro-label,
+  .welcome-screen .welcome-copy h1,
+  .welcome-screen .welcome-copy p { text-align: center; }
+  .welcome-screen .welcome-facts { justify-content: center; }
+  .welcome-screen .welcome-facts span { text-align: center; }
+  .welcome-screen .pilot-field span { text-align: center; }
+  .welcome-screen .pilot-field input { text-align: center; }
+  .welcome-screen .primary-button { justify-content: center; gap: 14px; }
+
+  /* 2 — AXIOM intro: body to the centre, less empty sky on top */
+  .axiom-screen.bleed .character-scene img { object-position: 50% 62%; height: 118%; top: -8%; }
+
+  /* 3 — AXIOM intro boxes: plain gradient, no glass */
+  .axiom-screen.bleed .axiom-line {
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    background: linear-gradient(135deg, rgba(58, 100, 165, 0.72), rgba(96, 140, 205, 0.58));
+    border-color: rgba(255, 255, 255, 0.28); border-left-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 6px 18px rgba(23, 54, 95, 0.18);
+  }
+  .axiom-screen.bleed .axiom-line.strong {
+    background: linear-gradient(135deg, rgba(210, 78, 62, 0.78), rgba(232, 102, 87, 0.62));
+  }
+
+  /* 6 + 8 — a scrim rising from the bottom of every full-bleed plate, under the
+     copy. "Do this for all screens." Sits on the vignette layer so it needs no
+     markup and never covers the top of the art. */
+  .game-screen.bleed .character-vignette,
+  .feedback-screen.bleed .character-vignette,
+  .section-intro-screen.bleed .character-vignette,
+  .axiom-screen.bleed .character-vignette {
+    background:
+      linear-gradient(180deg, rgba(17, 28, 46, 0) 30%, rgba(17, 28, 46, 0.42) 62%, rgba(17, 28, 46, 0.78) 100%),
+      linear-gradient(180deg, rgba(255, 248, 238, 0.05) 55%, rgba(41, 56, 74, 0.12));
+  }
+
+  /* 7 — label row clear of the progress bar */
+  .game-screen.bleed .scene-meta { top: 16px; }
+  .game-screen.bleed .plate-peek-btn { top: 42px; }
+  .game-screen.bleed .panel-sheet { top: 72px; }
+
+  /* 9 — question: white text only, on the plate */
+  .game-screen.bleed .step-situation h2,
+  .game-screen.bleed .step-situation .situation-copy,
+  .game-screen.bleed .axiom-line-reveal,
+  .game-screen.bleed .question-bar strong,
+  .game-screen.bleed .axiom-who,
+  .game-screen.bleed .question-bar-label,
+  .game-screen.bleed .gap-tile,
+  .game-screen.bleed .tile-option,
+  .game-screen.bleed .line-option { color: #fff; }
+  .game-screen.bleed .gap-tile,
+  .game-screen.bleed .tile-option,
+  .game-screen.bleed .line-option {
+    background: rgba(23, 54, 95, 0.46);
+    border-color: rgba(255, 255, 255, 0.42);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  .game-screen.bleed .decision-button strong,
+  .game-screen.bleed .decision-button h3,
+  .game-screen.bleed .decision-button small,
+  .game-screen.bleed .decision-button p,
+  .game-screen.bleed .decision-button u { color: #fff; }
+  .game-screen.bleed .decision-button {
+    background: rgba(23, 54, 95, 0.46); border-color: rgba(255, 255, 255, 0.42);
+  }
+
+  /* 10 — feedback: white text only */
+  .feedback-screen.bleed .feedback-chip,
+  .feedback-screen.bleed.success .feedback-chip,
+  .feedback-screen.bleed.failure .feedback-chip,
+  .feedback-screen.bleed .feedback-panel > p,
+  .feedback-screen.bleed.success .feedback-panel > p,
+  .feedback-screen.bleed.failure .feedback-panel > p { color: #fff; }
+}
+
+/* 1 (cont.) — the name label is a block inside a flex label; text-align on the
+   span alone did nothing because the span wasn't full width. */
+@media (max-width: 820px) {
+  .welcome-screen .pilot-field { align-items: center; }
+  .welcome-screen .pilot-field > span { display: block; width: 100%; text-align: center; }
+}
+
+/* 6 + 8 (cont.) — the section and AXIOM intro scenes are built without a
+   .character-vignette layer (only img + focus + scan), so the scrim rule above
+   had nothing to land on there. A pseudo-element carries it instead. */
+@media (max-width: 820px) {
+  .section-intro-screen.bleed .character-scene::after,
+  .axiom-screen.bleed .character-scene::after {
+    content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    border-radius: 26px 26px 20px 20px;
+    background: linear-gradient(180deg, rgba(17, 28, 46, 0) 30%, rgba(17, 28, 46, 0.42) 62%, rgba(17, 28, 46, 0.78) 100%);
+  }
+}
+
+/* ============================================================
+   TAP TO SKIP — MAKE IT VISIBLE (2026-09-02)
+   The hint already existed but was cream at 62% opacity, 11px, sitting
+   on a plate that is mostly light — invisible on every scene we ship.
+   It becomes the same glass pill as SEE FULL IMAGE so it reads as a
+   control, and it pulses once so the eye catches it during the beat.
+   ============================================================ */
+@media (max-width: 820px) {
+  .stage-skip {
+    bottom: 7%;
+    left: 50%; transform: translateX(-50%);
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(23, 54, 95, 0.42);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    color: #fff;
+    font: 800 12px/1 "Manrope", sans-serif;
+    letter-spacing: .16em;
+    box-shadow: 0 6px 20px rgba(23, 54, 95, 0.28);
+    animation: skipBreathe 2.2s ease-in-out infinite;
+  }
+  /* a finger-tap glyph, so it reads without relying on the words */
+  .stage-skip::before {
+    content: ""; width: 13px; height: 13px; flex: 0 0 13px;
+    border: 1.5px solid currentColor; border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+  }
+}
+@keyframes skipBreathe {
+  0%, 100% { box-shadow: 0 6px 20px rgba(23,54,95,.28), 0 0 0 0 rgba(255,255,255,.28); }
+  55%      { box-shadow: 0 6px 20px rgba(23,54,95,.28), 0 0 0 7px rgba(255,255,255,0); }
+}
+@media (prefers-reduced-motion: reduce) { .stage-skip { animation: none; } }
+
+/* The plate punches through the veil at z-index 45, which put it on top of the
+   skip pill — the hint said "tap to skip" but the pill itself swallowed nothing
+   and the tap only worked because the veil handler catches the whole screen.
+   Lift it above the plate so the control does what it says. */
+@media (max-width: 820px) {
+  .stage-skip { z-index: 50; pointer-events: auto; cursor: pointer; }
+}
+
+/* The hint now sits outside the veil (see main.js), so it needs its own
+   position and it only shows while the veil is up. */
+.stage-skip { display: none; }
+.game-screen.staged:not(.veil-out):not(.stage-done) .stage-skip { display: inline-flex; }
+@media (max-width: 820px) {
+  .game-screen.staged .stage-skip { position: absolute; z-index: 50; }
+}
+
+/* ============================================================
+   AXIOM INTRO — PORTRAIT PLATE (2026-09-02)
+   Vishrut's note asked for the image extended from the bottom with the
+   body moved to centre and the empty dome above reduced. That is now
+   the artwork itself: a 2:3 plate framed exactly that way. The nudges
+   that were faking it — 118% height, -8% top, 62% object-position —
+   come off, or they crop the head the new framing just fixed.
+   ============================================================ */
+@media (max-width: 820px) {
+  .axiom-screen.bleed .character-scene img {
+    height: 100%; top: 0;
+    object-fit: cover; object-position: 50% 50%;
+  }
+}
+
+/* The copy stack was pinned hard to the bottom edge, so START PLAYING and the
+   red line crowded the last few pixels of the screen. Lift the whole group. */
+@media (max-width: 820px) {
+  .axiom-screen.bleed .axiom-copy { bottom: 22px; }
+}
+
+/* The three copy boxes sit 8px apart but the CTA had no top margin at all, so
+   "Today you check." was flush against START PLAYING while everything above it
+   breathed. Same 8px, so the stack reads as one rhythm. */
+@media (max-width: 820px) {
+  .axiom-screen.bleed .axiom-copy .primary-button { margin-top: 8px; }
+}
+
+/* ============================================================
+   THE CTA ARROW MOVES (2026-09-02)
+   Kish picked variant C — a light sweeping across the button — with the
+   pulse ring from B on the arrow tile. One cycle: the sweep crosses,
+   the arrow steps right, the ring breathes out of the tile, then it
+   rests. 2.6s so it invites rather than nags.
+
+   Applied to every .primary-button, so it is the same invitation on
+   welcome, AXIOM, the brief, each section, feedback and the reveal.
+   ============================================================ */
+.primary-button { position: relative; overflow: hidden; }
+
+/* the sweep rides above the button's own fill but under its label */
+.primary-button::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: linear-gradient(105deg,
+    transparent 38%, rgba(255, 255, 255, 0.20) 50%, transparent 62%);
+  transform: translateX(-120%);
+  animation: ctaSweep 2.6s ease-in-out infinite;
+}
+.primary-button > span,
+.primary-button > b { position: relative; z-index: 1; }
+
+.primary-button > b {
+  animation: ctaNudge 2.6s cubic-bezier(.4, 0, .2, 1) infinite,
+             ctaRing  2.6s ease-out infinite;
+}
+
+@keyframes ctaSweep { 0%, 42% { transform: translateX(-120%); } 78%, 100% { transform: translateX(120%); } }
+@keyframes ctaNudge { 0%, 62%, 100% { transform: translateX(0); } 76% { transform: translateX(5px); } }
+@keyframes ctaRing {
+  0%, 55% { box-shadow: 0 0 0 0 rgba(233, 178, 58, 0.55); }
+  100%    { box-shadow: 0 0 0 13px rgba(233, 178, 58, 0); }
+}
+
+/* the hover lift needs the shadow back, and a press should feel immediate */
+.primary-button:active > b { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-button::after { animation: none; opacity: 0; }
+  .primary-button > b { animation: none; }
+}
