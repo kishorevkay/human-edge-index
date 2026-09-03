@@ -12,27 +12,28 @@ together — the dashboard is not a separate app.
 
 ---
 
-## 1. What you need to provision
+## 1. What you need to provision — nothing
 
-**One Upstash Redis database** (or any Redis with an Upstash-compatible REST
-API). Free tier is comfortably enough — the pilot is ~350 sessions.
+The database stays on our side. You don't need to create a Redis instance, a
+Vercel KV, or any store at all.
 
-Then three environment variables:
+Kish will send you three environment variables to set on the deployment:
 
 | Variable | What it is |
 |---|---|
-| `KV_REST_API_URL` | Upstash REST endpoint |
-| `KV_REST_API_TOKEN` | Upstash REST token |
-| `ATLAS_DASHBOARD_KEY` | The dashboard password. Kish will send this separately — **please keep the existing value**, it's already circulated internally. |
+| `KV_REST_API_URL` | Redis REST endpoint (ours) |
+| `KV_REST_API_TOKEN` | Redis REST token (ours) |
+| `ATLAS_DASHBOARD_KEY` | The dashboard password — already circulated internally, please keep the value as sent |
 
 `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` are accepted as aliases if
 that's what your tooling injects.
 
-> **Please provision a fresh database rather than reusing the one we're on.**
-> Ours is shared with two unrelated upGrad projects, so the credentials can't be
-> handed over. Starting fresh means the dashboard opens empty — see §4.
+Two asks on those variables:
 
----
+- **Set them as secrets**, not committed config — this repo is public.
+- **Please don't point the app at a different store.** The pilot's existing
+  players and leads live in ours, and the dashboard reads the same data the
+  game writes.
 
 ## 2. Hosting
 
@@ -94,19 +95,13 @@ also has a **CLEAR ALL DATA** button that wipes the store with no undo.
 
 ---
 
-## 4. The existing pilot data — a decision for Kish
+## 4. The existing pilot data — carries over automatically
 
-Today's deployment holds **352 sessions, 127 of them with a phone number.**
+Because the database doesn't move, the **352 sessions already recorded (127 with
+a phone number) are simply there** the moment your deployment points at it.
+Nothing to migrate, nothing to import.
 
-- **Fresh start (default):** the new database begins empty. Simplest, and no PII
-  moves between systems.
-- **Carry it over:** Kish exports from the current dashboard
-  (`CSV · PLAYERS`) and we import into the new store. Ask him before assuming
-  either — the leads have value.
-
-Nothing in the code needs to change for either path.
-
----
+The dashboard will keep counting on top of them.
 
 ## 5. Please don't change
 
